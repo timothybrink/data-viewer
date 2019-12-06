@@ -4,7 +4,6 @@ A simple graphing application, built in Electron, for viewing data over a serial
 
 Very primative at this point. Features to add:
 
- - Automatically resizing chart
  - Data labels/units/etc
  - Multiple charts
  - Data export
