@@ -70,6 +70,17 @@ module.exports = function (webContents) {
           }
         }
       ]
+    },
+    {
+      label: 'Data',
+      submenu: [
+        {
+          label: 'Edit data profile...',
+          click: function () {
+            webContents.send('data-profile-edit')
+          }
+        }
+      ]
     }
   ]
 
