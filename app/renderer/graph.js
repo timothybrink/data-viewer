@@ -106,6 +106,7 @@ function setupGraph(headers) {
 }
 
 function graphDataRow(data) {
+  // time, in the first column, goes on the x axis
   let xVal = data.shift()
 
   mainChart.data.labels.push(xVal)
