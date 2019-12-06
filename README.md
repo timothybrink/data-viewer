@@ -14,4 +14,9 @@ So still a work in progress.
 ## Installation
 
 Clone this repo, npm install, and run the build script.
-Make sure to run npm run rebuild after npm install to rebuild the serialport library for the version of NodeJS that Electron is using.
+
+It should build for the platform you are on. I haven't put a lot of work into this part yet though, and certainly haven't tested it on any platform but my own (Ubuntu 19.10). Try the electron-builder documentation (found [here](https://www.electron.build)) if you need more help.
+
+## Contact
+
+For any questions, problems, etc. feel free to contact me at [contact@timothybrink.dev](mailto:contact@timothybrink.dev). 
