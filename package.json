@@ -4,6 +4,7 @@
   "description": "Simple serial data graphing app",
   "main": "app/main.js",
   "dependencies": {
+    "@tbrink/yadl": "^1.0.2",
     "chart.js": "^2.9.3",
     "serialport": "^8.0.5"
   },
