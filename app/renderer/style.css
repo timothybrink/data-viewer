@@ -1,0 +1,31 @@
+#toolbar {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+}
+
+dialog {
+  position: absolute;
+  top: 25%;
+  left: 50%;
+  transform: translate(-50%, 0);
+  width: 300px;
+  padding: 20px;
+  transition: all .2s ease;
+}
+
+label {
+  user-select: none;
+}
+
+#open-connection {
+  position: fixed;
+  background-color: white;
+  padding: 10px 20px;
+  box-shadow: 0 0 10px #000000b0;
+  border-radius: 5px;
+}
+
+.main-content {
+  padding-top: 40px;
+}
