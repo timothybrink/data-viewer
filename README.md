@@ -14,4 +14,4 @@ So still a work in progress.
 ## Installation
 
 Clone this repo, npm install, and run the build script.
-Make sure to run npm run rebuid after npm install to rebuild the serialport library for the version of NodeJS that Electron is using.
+Make sure to run npm run rebuild after npm install to rebuild the serialport library for the version of NodeJS that Electron is using.
