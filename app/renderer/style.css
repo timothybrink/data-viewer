@@ -4,7 +4,10 @@
   right: 10px;
 }
 
-dialog {
+dialog, .dialog {
+  border: none;
+  border-radius: 3px;
+  box-shadow: 0 0 10px black;
   position: absolute;
   top: 25%;
   left: 50%;
