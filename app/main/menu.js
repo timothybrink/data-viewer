@@ -59,8 +59,8 @@ module.exports = function (webContents) {
           label: 'Shift graph',
           type: 'checkbox',
           checked: true,
-          click: function () {
-            webContents.send('shift-graph-toggle', this.checked)
+          click: function (menuItem) {
+            webContents.send('shift-graph-toggle', menuItem.checked)
           }
         },
         {
