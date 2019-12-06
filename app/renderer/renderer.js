@@ -1,7 +1,7 @@
 const { ipcRenderer } = require('electron')
 const dialog = require('./dialog')
-const graphOut = require('./graph')
-const textOut = require('./text')
+const dataManager = require('./dataManager')
+const yadl = require('@tbrink/yadl')
 
 ipcRenderer.on('open-connection-request', function (e) {
   dialogElt = dialog(
@@ -37,8 +37,7 @@ ipcRenderer.on('connection-opened', function (_event, data) {
 })
 
 ipcRenderer.on('data', function (_event, data) {
-  graphOut(data)
-  textOut.show(data)
+  dataManager.add(data)
 })
 
 ipcRenderer.on('connection-closed', function () {
@@ -51,9 +50,61 @@ ipcRenderer.on('connection-closed', function () {
 })
 
 ipcRenderer.on('error', function (_event, data) {
-  let d = dialog('Connection Error.')
+  let d = dialog('Connection Error. See developer console for details.')
 
   console.log(data)
 
   setTimeout(() => { d.close() }, 2000)
+})
+
+const dataProfileDialog = document.querySelector('#data-profile-dialog')
+
+ipcRenderer.on('data-profile-edit', function () {
+  dataProfileDialog.hidden = false
+})
+
+yadl.select('#variable-select')
+  .listen('change', function (e) {
+    let dataProfile = dataManager.getDataProfile(this.value)
+
+    yadl.select('#variable-name')
+      .set('value', this.value)
+    
+    yadl.select('#variable-units')
+      .set('value', dataProfile.variableUnits)
+  })
+
+yadl.select('#variable-name')
+  .listen('change', function (e) {
+    let selector = yadl.select('#variable-select')
+
+    let variableName = selector.get('value')
+    dataManager.updateDataProfile(variableName, 'variable-name', this.value)
+
+    let oldValue
+    if (this.oldValue)
+      oldValue = this.oldValue
+    else
+      oldValue = this.defaultValue
+
+    selector.children.forEach(i => {
+      if (i.get('value') == oldValue) {
+        i.set('value', this.value).set('textContent', this.value)
+      }
+    })
+
+    this.oldValue = this.value
+  })
+
+yadl.select('#variable-units')
+  .listen('change', function (e) {
+    let variableName = yadl.select('#variable-select').get('value')
+    dataManager.updateDataProfile(variableName, 'variable-units', this.value)
+  })
+
+dataManager.on('got-first-data', function (columns) {
+  columns.forEach(i => {
+    yadl.select('#variable-select')
+      .append(yadl.create('option').set('value', i).set('textContent', i))
+  })
 })
