@@ -17,14 +17,14 @@ app.get('/init', function (req, res, next) {
     let headers = JSON.parse(req.query.headers)
 
     // Generate connection id
-    let id = Connection.generate_id()
+    let id = Connection.generateId()
     while (connections.find(i => i.id == id)) {
-      id = Connection.generate_id()
+      id = Connection.generateId()
     }
 
     connections.push(new Connection(id, headers))
 
-    res.json({ done: true })
+    res.json({ done: true, id })
   } catch (e) {
     res.json({ done: false, error: 'JSON parse error' })
   }
