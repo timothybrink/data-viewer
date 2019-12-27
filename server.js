@@ -1,5 +1,6 @@
 const express = require('express')
 const app = express()
+const expressWs = require('express-ws')(app)
 const Connection = require('./Connection')
 
 const PORT = '3300'
@@ -8,6 +9,17 @@ const connections = []
 
 // The UI is served here.
 app.use(express.static('./ui/'))
+
+// Websocket route
+app.ws('/ws', function (ws, req) {
+  connections.forEach(conn => {
+    conn.addUpdater(data => ws.send(data))
+  })
+
+  ws.on('message', function (msg) {
+    console.log(msg)
+  })
+})
 
 // Requested when initiating a telemetry stream. Sets up headers.
 // Expected format: /init?headers=<JSON array>
