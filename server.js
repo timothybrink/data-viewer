@@ -10,8 +10,8 @@ const connections = []
 // The UI is served here.
 app.use(express.static('./ui/'))
 
-// Websocket route
-app.ws('/ws', function (ws, req) {
+// Websocket route for UI
+app.ws('/wsui', function (ws, req) {
   connections.forEach(conn => {
     conn.addUpdater(data => ws.send(data))
   })
