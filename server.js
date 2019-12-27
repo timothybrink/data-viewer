@@ -31,7 +31,28 @@ app.get('/init', function (req, res, next) {
 })
 
 // Requested when providing data.
-app.get('/update')
+// Expected format: /update?id=<id>&data=<JSON array>
+app.get('/update', function (req, res, next) {
+  try {
+    // Get connection
+    let id = Number(req.query.id)
+    let conn = connections.find(i => i.id == id)
+    
+    if (!conn) {
+      res.json({ done: false, error: 'Invalid ID'})
+      return
+    }
+
+    // Get data
+    let data = JSON.parse(req.query.data)
+
+    conn.update(data)
+
+    res.send()
+  } catch (e) {
+    res.json({ done: false, error: 'Something is wrong with your update request' })
+  }
+})
 
 // Requested when closing a telemetry stream.
 app.get('/close')
