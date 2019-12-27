@@ -3,6 +3,9 @@ const app  = express()
 
 const PORT = '3300'
 
+// The UI is served here.
+app.use(express.static('./ui/'))
+
 // Requested when initiating a telemetry stream. Sets up headers.
 app.get('/init')
 
