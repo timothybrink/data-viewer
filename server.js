@@ -1,13 +1,34 @@
 const express = require('express')
-const app  = express()
+const app = express()
+const Connection = require('./Connection')
 
 const PORT = '3300'
+
+const connections = []
 
 // The UI is served here.
 app.use(express.static('./ui/'))
 
 // Requested when initiating a telemetry stream. Sets up headers.
-app.get('/init')
+// Expected format: /init?headers=<JSON array>
+app.get('/init', function (req, res, next) {
+  try {
+    // Get data headers
+    let headers = JSON.parse(req.query.headers)
+
+    // Generate connection id
+    let id = Connection.generate_id()
+    while (connections.find(i => i.id == id)) {
+      id = Connection.generate_id()
+    }
+
+    connections.push(new Connection(id, headers))
+
+    res.json({ done: true })
+  } catch (e) {
+    res.json({ done: false, error: 'JSON parse error' })
+  }
+})
 
 // Requested when providing data.
 app.get('/update')
