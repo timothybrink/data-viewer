@@ -80,7 +80,7 @@ app.get('/close', function (req, res, next) {
 
   conn.close()
 
-  res.send()
+  res.json({ done: true })
 })
 
 // Error handling
