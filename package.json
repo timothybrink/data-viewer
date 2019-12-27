@@ -2,7 +2,7 @@
   "name": "telemetry",
   "version": "1.0.0",
   "description": "Simple telemetry server/interface",
-  "main": "app/main.js",
+  "main": "server.js",
   "dependencies": {
     "@tbrink/yadl": "^1.0.2",
     "chart.js": "^2.9.3",
@@ -12,10 +12,7 @@
   "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "electron .",
-    "rebuild": "electron-rebuild",
-    "build": "electron-builder",
-    "postinstall": "electron-builder install-app-deps"
+    "start": "node server.js"
   },
   "repository": {
     "type": "git",
