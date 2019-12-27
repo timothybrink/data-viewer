@@ -37,9 +37,9 @@ app.get('/update', function (req, res, next) {
     // Get connection
     let id = Number(req.query.id)
     let conn = connections.find(i => i.id == id)
-    
+
     if (!conn) {
-      res.json({ done: false, error: 'Invalid ID'})
+      res.json({ done: false, error: 'Invalid ID' })
       return
     }
 
@@ -55,7 +55,21 @@ app.get('/update', function (req, res, next) {
 })
 
 // Requested when closing a telemetry stream.
-app.get('/close')
+// Expected format: /close?id=<id>
+app.get('/close', function (req, res, next) {
+  // Get connection
+  let id = Number(req.query.id)
+  let conn = connections.find(i => i.id == id)
+
+  if (!conn) {
+    res.json({ done: false, error: 'Invalid ID' })
+    return
+  }
+
+  conn.close()
+
+  res.send()
+})
 
 // Error handling
 app.use(function (req, res) {
