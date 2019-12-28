@@ -12,6 +12,7 @@ class Telem:
         self.live = live
         self.server = server
         self.finished = False
+        self.server_id = None
         
         # Initiate csv
         if self.csv:
@@ -32,16 +33,15 @@ class Telem:
         # Initiate server connection
         if self.live:
             try:
-                query = {
-                    'init': True,
-                    'headers': self.headers
-                }
-                response = urlopen(self.server + '?' + urlencode(query, quote_via=quote))
+                query = {'headers': json.dumps(self.headers)}
+                response = urlopen(self.server + '/init?' + urlencode(query, quote_via=quote))
                 text = response.read().decode('utf-8')
                 try:
                     obj = json.loads(text)
-                    self.server_open = obj['done']
-                    print('Successfully initiated connection.')
+                    if obj['done']:
+                        self.server_id = int(obj['id'])
+                    else:
+                        print('Connection not initated. Error:', obj['error'])
                 except json.decoder.JSONDecodeError:
                     print('JSON error: Something\'s not right. Got response', text)
             except (ConnectionRefusedError, URLError):
@@ -60,25 +60,29 @@ class Telem:
         
         # Update live telemetry server
         if self.live:
-            query = {'data': data}
+            query = {'data': json.dumps(data), 'id': self.server_id}
             try:
-                urlopen(self.server + '?' + urlencode(query, quote_via=quote))
+                urlopen(self.server + '/update?' + urlencode(query, quote_via=quote))
+                return True
             except (ConnectionRefusedError, URLError):
                 print('HTTP error: check that server is running.')
+                return False
     
     def close(self):
         if self.csv:
             self.file.close()
         if self.live:
-            query = {'finished': True}
-            response = urlopen(self.server + '?' + urlencode(query, quote_via=quote))
+            query = {'id': self.server_id}
+            response = urlopen(self.server + '/close?' + urlencode(query, quote_via=quote))
             text = response.read().decode('utf-8')
             try:
                 obj = json.loads(text)
-                self.server_open = not obj['done']
-                print('Successfully closed connection.')
+                if obj['done']:
+                    self.server_id = None
+                    return True
             except json.decoder.JSONDecodeError:
                 print('JSON error: Something\'s not right. Got response', text)
+                return False
         self.finished = True
 
 if __name__ == '__main__':
