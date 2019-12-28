@@ -5,14 +5,17 @@
   <meta charset="utf-8">
   <title>Serial Grapher</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline'">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' cdnjs.cloudflare.com">
   <link rel="stylesheet" href="style.css">
+  <script src="DataSet.js"></script>
+  <script src="dataManager.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.bundle.min.js"></script>
+  <script src="graph.js"></script>
 </head>
 
 <body>
   <dialog id="main">
-    <div class="content">
-    </div>
+    <div class="content"></div>
   </dialog>
   <div id="open-connection">No connections</div>
   <div class="main-content"></div>

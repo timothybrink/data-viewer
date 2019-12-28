@@ -1,16 +1,23 @@
-exports.add = function (data) {
-  // add data to the datasets
+const dataMgr = {}
+
+dataMgr.datasets = []
+
+dataMgr.newData = function (id, data) {
+  let datasets = dataMgr.datasets.filter(ds => ds.connection == id)
+  datasets.forEach(ds => ds.addData(data[ds.column]))
+  graph.update(data)
 }
 
-exports.getDataProfile = function (variableName) {
-  // return the data profile for the given variableName
-
+dataMgr.initDataStream = function (id, headers) {
+  headers.forEach((colName, i) => {
+    dataMgr.datasets.push(new DataSet(colName, i, id))
+  })
+  graph.init(headers)
 }
 
-exports.updateDataProfile = function (variableName, property, value) {
-  // update data profile for variable variableName and property to value
-}
-
-exports.on = function (event, handler) {
-  // call handler when event happens
+dataMgr.closeDataStream = function (id) {
+  let datasets = dataMgr.datasets.filter(ds => ds.connection == id)
+  datasets.forEach(ds => {
+    ds.finished = true
+  })
 }
