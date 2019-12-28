@@ -6,18 +6,22 @@ const Connection = require('./Connection')
 const PORT = '3300'
 
 const connections = []
+const uiConnections = []
 
 // The UI is served here.
 app.use(express.static('./ui/'))
 
 // Websocket route for UI
 app.ws('/wsui', function (ws, req) {
-  connections.forEach(conn => {
-    conn.addUpdater(data => ws.send(data))
-  })
+  uiConnections.push(ws)
 
   ws.on('message', function (msg) {
-    console.log(msg)
+    if (msg == 'open-conn')
+      console.log('New UI Connection')
+  })
+
+  ws.on('close', function () {
+    uiConnections.splice(uiConnections.indexOf(ws), 1)
   })
 })
 
@@ -35,9 +39,11 @@ app.get('/init', function (req, res, next) {
     }
 
     connections.push(new Connection(id, headers))
+    uiConnections.forEach(ws => ws.send(JSON.stringify({ event: 'data-opened', id, headers })))
 
     res.json({ done: true, id })
   } catch (e) {
+    console.error(e.stack)
     res.json({ done: false, error: 'JSON parse error' })
   }
 })
@@ -59,6 +65,7 @@ app.get('/update', function (req, res, next) {
     let data = JSON.parse(req.query.data)
 
     conn.update(data)
+    uiConnections.forEach(ws => ws.send(JSON.stringify({ id, data })))
 
     res.send()
   } catch (e) {
@@ -79,6 +86,8 @@ app.get('/close', function (req, res, next) {
   }
 
   conn.close()
+  uiConnections.forEach(ws => ws.send(JSON.stringify({event: 'data-closed', id})))
+  console.log('Connection closed.')
 
   res.json({ done: true })
 })

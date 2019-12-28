@@ -10,13 +10,8 @@ module.exports = class Connection {
     this.finished = false
   }
 
-  addUpdater(fn) {
-    this.updater = fn
-  }
-
   update(data) {
     this.data.push(data)
-    this.updater(data)
   }
 
   close() {
