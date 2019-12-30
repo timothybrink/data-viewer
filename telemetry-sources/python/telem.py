@@ -60,7 +60,7 @@ class Telem:
         
         # Update live telemetry server
         if self.live:
-            query = {'data': json.dumps(data), 'id': self.server_id}
+            query = {'data': json.dumps(data), 'id': self.server_id, 'time': datetime.now().second}
             try:
                 urlopen(self.server + '/update?' + urlencode(query, quote_via=quote))
                 return True

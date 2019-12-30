@@ -49,7 +49,7 @@ app.get('/init', function (req, res, next) {
 })
 
 // Requested when providing data.
-// Expected format: /update?id=<id>&data=<JSON array>
+// Expected format: /update?id=<id>&time=<timestamp>&data=<JSON array>
 app.get('/update', function (req, res, next) {
   try {
     // Get connection
@@ -63,9 +63,10 @@ app.get('/update', function (req, res, next) {
 
     // Get data
     let data = JSON.parse(req.query.data)
+    let time = Number(req.query.time)
 
     conn.update(data)
-    uiConnections.forEach(ws => ws.send(JSON.stringify({ id, data })))
+    uiConnections.forEach(ws => ws.send(JSON.stringify({ id, time, data })))
 
     res.send()
   } catch (e) {
