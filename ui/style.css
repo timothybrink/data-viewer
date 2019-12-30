@@ -20,7 +20,3 @@ dialog, .dialog {
 label {
   user-select: none;
 }
-
-.main-content {
-  padding-top: 40px;
-}
