@@ -21,14 +21,6 @@ label {
   user-select: none;
 }
 
-#open-connection {
-  position: fixed;
-  background-color: white;
-  padding: 10px 20px;
-  box-shadow: 0 0 10px #000000b0;
-  border-radius: 5px;
-}
-
 .main-content {
   padding-top: 40px;
 }
