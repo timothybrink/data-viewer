@@ -23,10 +23,9 @@
       "position": "0 1"
     },
     {
-      "type": "chart",
+      "type": "text",
       "dataName": "test4",
       "description": "Another test",
-      "color": "black",
       "position": "1 1"
     }
   ]

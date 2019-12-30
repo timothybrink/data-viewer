@@ -20,3 +20,8 @@ dialog, .dialog {
 label {
   user-select: none;
 }
+
+.text-output-container {
+  padding: 5px 10px;
+  color: white;
+}

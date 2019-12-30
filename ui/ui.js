@@ -75,6 +75,9 @@ ui.chartComponent = function (container, state) {
 /**
  * The text component. This function is passed to GoldenLayout#registerComponent.
  */
-ui.textComponent = function (container, componentState) {
-  
+ui.textComponent = function (container, state) {
+  let textViewer = new TextViewer(container.getElement()[0], state.fields.map(dataMgr.getDataSet))
+  textViewer.init()
+  container.setTitle(state.description)
+  return textViewer
 }
