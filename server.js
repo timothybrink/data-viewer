@@ -16,8 +16,14 @@ app.ws('/wsui', function (ws, req) {
   uiConnections.push(ws)
 
   ws.on('message', function (msg) {
-    if (msg == 'open-conn')
+    if (msg == 'open-conn') {
       console.log('New UI Connection')
+      connections.forEach(conn => ws.send(JSON.stringify({
+        event: 'data-opened',
+        id: conn.id,
+        headers: conn.headers
+      })))
+    }
   })
 
   ws.on('close', function () {
