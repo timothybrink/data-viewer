@@ -86,10 +86,12 @@ class Telem:
         self.finished = True
 
 if __name__ == '__main__':
-    t = Telem(['test1', 'test2'], csv=False)
+    import time
+    from random import random
+    t = Telem(['test1', 'test2', 'test3', 'test4'], csv=False)
 
-    t.update(1, 'a')
-
-    t.update(2, 'b')
+    for x in range(50):
+        t.update(random(), random(), random(), random())
+        time.sleep(0.5)
 
     t.close()
