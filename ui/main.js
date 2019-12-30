@@ -26,7 +26,7 @@ ws.addEventListener('message', function (event) {
       dataMgr.newData(data.id, data.time, data.data)
     }
   } catch (e) {
-    console.error(e.stack, event.data)
+    console.error(e)
   }
 })
 
