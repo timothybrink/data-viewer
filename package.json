@@ -1,27 +1,22 @@
 {
-  "name": "graphing",
+  "name": "telemetry",
   "version": "1.0.0",
-  "description": "Simple serial data graphing app",
-  "main": "app/main.js",
+  "description": "Simple telemetry server/interface",
+  "main": "server.js",
   "dependencies": {
-    "chart.js": "^2.9.3",
-    "serialport": "^8.0.5"
+    "@tbrink/yadl": "^1.0.2",
+    "express": "^4.17.1",
+    "express-ws": "^4.0.0",
+    "serialport": "^8.0.6"
   },
-  "devDependencies": {
-    "electron": "^7.1.3",
-    "electron-builder": "^21.2.0",
-    "electron-rebuild": "^1.8.8"
-  },
+  "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "electron .",
-    "rebuild": "electron-rebuild",
-    "build": "electron-builder",
-    "postinstall": "electron-builder install-app-deps"
+    "start": "node server.js"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/timothybrink/data-viewer.git"
+    "url": "https://github.com/timothybrink/telemetry.git"
   },
   "author": "Timothy Brink <contact@timothybrink.dev> (https://timothybrink.dev)",
   "license": "MIT"

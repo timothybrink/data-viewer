@@ -1,0 +1,32 @@
+{
+  "gridSize": "4x3",
+  "components": [
+    {
+      "type": "chart",
+      "dataName": "test1",
+      "description": "A test description",
+      "color": "rgb(255, 100, 100)",
+      "position": "0 0"
+    },
+    {
+      "type": "chart",
+      "dataName": "test2",
+      "description": "Another test",
+      "color": "rgb(100, 100, 255)",
+      "position": "1 0"
+    },
+    {
+      "type": "chart",
+      "dataName": "test3",
+      "description": "Another test",
+      "color": "rgb(100, 255, 100)",
+      "position": "0 1"
+    },
+    {
+      "type": "text",
+      "dataName": "test4",
+      "description": "Another test",
+      "position": "1 1"
+    }
+  ]
+}

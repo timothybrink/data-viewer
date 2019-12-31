@@ -1,21 +1,22 @@
 # Data Viewer
 
-A simple graphing application, built in Electron, for viewing data over a serial port.
+A simple telemetry server/UI, built in JS.
 
-Very primative at this point. Features to add:
+Features to add:
 
- - Data labels/units/etc
- - Multiple charts
- - Data export
+ - Better time-based graphing
+ - Data export (currently the telem.py module has csv export built in, but I plan on moving that functionality to the server itself.)
 
 So still a work in progress.
 
 ## Installation
 
-Clone this repo, npm install, and run the build script.
+Clone this repo, npm install, and run `npm start`
 
-It should build for the platform you are on. I haven't put a lot of work into this part yet though, and certainly haven't tested it on any platform but my own (Ubuntu 19.10). Try the electron-builder documentation (found [here](https://www.electron.build)) if you need more help.
+## Usage
+
+The idea is that npm start runs a telemetry server on localhost:3300. You can then send data to it, or open localhost:3300 in a browser and look at the incoming telemetry. Data is sent by means of HTTP get requests, and there's some info on formatting in server.js. As for the UI, it can be customized by the UI.json file (in the ui directory). Right now it's a test setup, but it should be pretty clear how to change it.
 
 ## Contact
 
-For any questions, problems, etc. feel free to contact me at [contact@timothybrink.dev](mailto:contact@timothybrink.dev). 
+For any questions, problems, etc. (better documentation?) feel free to contact me at [contact@timothybrink.dev](mailto:contact@timothybrink.dev). 
