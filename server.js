@@ -56,6 +56,7 @@ app.get('/init', function (req, res, next) {
 
 // Requested when providing data.
 // Expected format: /update?id=<id>&time=<timestamp>&data=<JSON array>
+// Need to add timeouts for non WebSocket connections
 app.get('/update', function (req, res, next) {
   try {
     // Get connection

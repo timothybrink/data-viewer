@@ -14,6 +14,8 @@ ws.addEventListener('message', function (event) {
     data = JSON.parse(event.data)
     // Not data, just a message telling us the server has a new data source
     if (data.event == 'data-opened') {
+      console.log('Headers received:')
+      console.log(data.headers)
       dataMgr.initDataStream(data.id, data.headers)
     }
     // Not data either, a message telling us that a connection to the
