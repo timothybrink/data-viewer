@@ -32,7 +32,7 @@ class Graph {
     this.datasets.forEach((dataset, i) => {
       data.datasets.push({
         label: dataset.name,
-        borderColor: this.options.color,
+        borderColor: this.options.color[i] || this.options.color,
         pointRadius: 0,
         data: [],
         backgroundColor: 'rgba(0,0,0,0)'
