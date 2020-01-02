@@ -95,7 +95,7 @@ app.get('/close', function (req, res, next) {
   }
 
   conn.close()
-  uiConnections.forEach(ws => ws.send(JSON.stringify({event: 'data-closed', id})))
+  uiConnections.forEach(ws => ws.send(JSON.stringify({ event: 'data-closed', id })))
   console.log('Connection closed.')
 
   res.json({ done: true })
