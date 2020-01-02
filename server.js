@@ -95,6 +95,7 @@ app.get('/close', function (req, res, next) {
   }
 
   conn.close()
+  connections.splice(connections.findIndex(i => i.id == id), 1)
   uiConnections.forEach(ws => ws.send(JSON.stringify({ event: 'data-closed', id })))
   console.log('Connection closed.')
 
