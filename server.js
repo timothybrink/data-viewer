@@ -77,6 +77,7 @@ app.get('/update', function (req, res, next) {
 
     res.send()
   } catch (e) {
+    console.error(e.stack)
     res.json({ done: false, error: 'Something is wrong with your update request' })
   }
 })
