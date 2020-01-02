@@ -51,7 +51,7 @@ app.get('/init', function (req, res, next) {
     res.json({ done: true, id })
   } catch (e) {
     console.error(e.stack)
-    res.json({ done: false, error: 'JSON parse error' })
+    res.json({ done: false, error: e.message })
   }
 })
 
