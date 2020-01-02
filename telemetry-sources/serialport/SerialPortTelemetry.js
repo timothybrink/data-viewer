@@ -5,8 +5,9 @@ const http = require('http')
 module.exports = class SerialPortTelemetry {
   // Add a fields argument to use instead of those found in the data... works better generally.
   // But fall back to fields found in the data.
-  constructor(port, baudRate = 9600, server = 'http://localhost:3300') {
+  constructor(port, timeout = 1000, baudRate = 9600, server = 'http://localhost:3300') {
     this.port = port
+    this.timeout = timeout
     this.baudRate = baudRate
     this.server = server
     this.finished = false
@@ -44,7 +45,7 @@ module.exports = class SerialPortTelemetry {
   }
 
   initiateServer() {
-    http.get(this.server + `/init?headers=${JSON.stringify(this.data.fields)}`, res => {
+    http.get(this.server + `/init?headers=${JSON.stringify(this.data.fields)}&timeout=${this.timeout}`, res => {
       if (res.statusCode != 200)
         console.log(res.statusCode)
 
@@ -75,7 +76,7 @@ module.exports = class SerialPortTelemetry {
         if (str) {
           let { done, error } = JSON.parse(str)
           if (!done)
-            console.log(error, this.serverId)
+            console.log('Error:', error, this.serverId)
         }
       })
     })

@@ -3,9 +3,10 @@ module.exports = class Connection {
     return Math.round(Math.random() * 10000)
   }
 
-  constructor(id, headers) {
+  constructor(id, headers, timeout) {
     this.id = id
     this.headers = headers
+    this.timeout = timeout
     this.data = []
     this.finished = false
   }

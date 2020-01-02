@@ -32,11 +32,12 @@ app.ws('/wsui', function (ws, req) {
 })
 
 // Requested when initiating a telemetry stream. Sets up headers.
-// Expected format: /init?headers=<JSON array>
+// Expected format: /init?headers=<JSON array>&timeout=<timeout in MS>
 app.get('/init', function (req, res, next) {
   try {
     // Get data headers
     let headers = JSON.parse(req.query.headers)
+    let timeout = Number(req.query.timeout)
 
     // Generate connection id
     let id = Connection.generateId()
@@ -44,7 +45,7 @@ app.get('/init', function (req, res, next) {
       id = Connection.generateId()
     }
 
-    connections.push(new Connection(id, headers))
+    connections.push(new Connection(id, headers, timeout))
     uiConnections.forEach(ws => ws.send(JSON.stringify({ event: 'data-opened', id, headers })))
 
     res.json({ done: true, id })
@@ -56,12 +57,21 @@ app.get('/init', function (req, res, next) {
 
 // Requested when providing data.
 // Expected format: /update?id=<id>&time=<timestamp>&data=<JSON array>
-// Need to add timeouts for non WebSocket connections
+const timeouts = []
 app.get('/update', function (req, res, next) {
   try {
     // Get connection
     let id = Number(req.query.id)
     let conn = connections.find(i => i.id == id)
+
+    // Clear previous timeout
+    let timeoutIndex = timeouts.findIndex(t => t.id == id)
+    if (timeouts[timeoutIndex]) {
+      clearTimeout(timeouts[timeoutIndex].timeout)
+      timeouts.splice(timeoutIndex, 1)
+    } else {
+      console.error('timeout not found; index', timeoutIndex)
+    }
 
     if (!conn) {
       res.json({ done: false, error: 'Invalid ID' })
@@ -74,6 +84,15 @@ app.get('/update', function (req, res, next) {
 
     conn.update(data)
     uiConnections.forEach(ws => ws.send(JSON.stringify({ id, time, data })))
+
+    // Set timeout
+    let timeout = setTimeout(() => {
+      conn.close()
+      connections.splice(connections.findIndex(i => i.id == id), 1)
+      uiConnections.forEach(ws => ws.send(JSON.stringify({ event: 'data-closed', id })))
+      console.log(`Connection ${id} closed (timeout).`)
+    }, conn.timeout)
+    timeouts.push({ id, timeout })
 
     res.send()
   } catch (e) {
