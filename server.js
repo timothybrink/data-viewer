@@ -120,7 +120,7 @@ app.get('/update', function (req, res, next) {
       clearTimeout(timeouts[timeoutIndex].timeout)
       timeouts.splice(timeoutIndex, 1)
     } else {
-      console.error('timeout not found; index', timeoutIndex)
+      console.error('timeout not found')
     }
 
     if (!conn) {
