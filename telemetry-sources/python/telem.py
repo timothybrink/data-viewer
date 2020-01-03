@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 from urllib.request import urlopen
 from urllib.parse import urlencode, quote
 from urllib.error import URLError
@@ -10,6 +10,7 @@ class Telem:
         self.server = server
         self.finished = False
         self.server_id = None
+        self.start_time = datetime.now()
         
         try:
             query = {'headers': json.dumps(self.headers), 'timeout': 1000}
@@ -28,7 +29,8 @@ class Telem:
 
     
     def update(self, *data):
-        query = {'data': json.dumps(data), 'id': self.server_id, 'time': datetime.now().second}
+        ms_since_start = round((datetime.now() - self.start_time) / timedelta(milliseconds=1))
+        query = {'data': json.dumps(data), 'id': self.server_id, 'time': ms_since_start}
         try:
             urlopen(self.server + '/update?' + urlencode(query, quote_via=quote))
             return True
