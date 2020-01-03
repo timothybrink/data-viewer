@@ -30,9 +30,13 @@ class Graph {
       datasets: []
     }
     this.datasets.forEach((dataset, i) => {
+      let color = this.options.color
+      if (Array.isArray(color))
+        color = color[i]
+
       data.datasets.push({
         label: dataset.name,
-        borderColor: this.options.color[i] || this.options.color,
+        borderColor: color,
         pointRadius: 0,
         data: [],
         backgroundColor: 'rgba(0,0,0,0)'
