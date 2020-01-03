@@ -12,7 +12,7 @@ class Telem:
         self.server_id = None
         
         try:
-            query = {'headers': json.dumps(self.headers)}
+            query = {'headers': json.dumps(self.headers), 'timeout': 1000}
             response = urlopen(self.server + '/init?' + urlencode(query, quote_via=quote))
             text = response.read().decode('utf-8')
             try:
@@ -53,10 +53,10 @@ class Telem:
 if __name__ == '__main__':
     import time
     from random import random
-    t = Telem(['test1', 'test2', 'test3', 'test4'])
+    t = Telem(['test1', 'test2', 'test3', 'test4', 'test5'])
 
     for x in range(50):
-        t.update(random(), random(), random(), random())
+        t.update(random(), random(), random(), random(), random())
         time.sleep(0.5)
 
     t.close()
