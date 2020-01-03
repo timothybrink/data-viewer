@@ -18,13 +18,13 @@ ui.init = function () {
     .then(prefs => {
       // Set up the ui
       ui.layout = prefs
-      
+
       let [width, height] = prefs.gridSize.split('x').map(Number)
       ui.height = height
       ui.width = width
-      
+
       prefs.components.forEach(ui.addComponent)
-      
+
       ui._glObj = new GoldenLayout(ui.config)
       ui._glObj.registerComponent('textComponent', ui.textComponent)
       ui._glObj.registerComponent('chartComponent', ui.chartComponent)
@@ -42,7 +42,7 @@ ui.addComponent = function (component) {
 
   if (!ui.config.content[0].content[x])
     ui.config.content[0].content[x] = { type: 'column', content: [] }
-  
+
   let newComponent = {
     type: 'component',
     componentName: component.type + 'Component'
@@ -58,7 +58,16 @@ ui.addComponent = function (component) {
     description: component.description,
     color: component.color,
   }
-  ui.config.content[0].content[x].content[y] = newComponent
+  let position = ui.config.content[0].content[x].content[y]
+  if (position && position.type == 'stack') {
+    // There is already a stack. Add newComponent
+    position.content.push(newComponent)
+  } else if (position && position.type == 'component') {
+    // No stack, need to wrap the old component in a stack.
+    ui.config.content[0].content[x].content[y] = { type: 'stack', content: [position, newComponent] }
+  } else {
+    ui.config.content[0].content[x].content[y] = newComponent
+  }
 }
 
 /**
