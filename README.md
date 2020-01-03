@@ -2,15 +2,11 @@
 
 A simple telemetry server/UI, built in JS.
 
-Things to work on:
-
- - Better time-based graphing
-
-So still a work in progress.
+Still a work in progress.
 
 ## Installation
 
-Clone this repo, npm install, and run `npm start`
+Clone this repo, `npm install`, and run `npm start`
 
 ## Usage
 
