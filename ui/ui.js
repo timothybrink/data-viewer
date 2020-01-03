@@ -87,10 +87,17 @@ ui.init = function () {
 
       prefs.components.forEach(ui.addComponent)
 
-      ui._glObj = new GoldenLayout(ui.config)
+      let container = document.querySelector('.gl-container')
+      container.style.height = (window.innerHeight - 33) + 'px'
+      ui._glObj = new GoldenLayout(ui.config, container)
       ui._glObj.registerComponent('textComponent', ui.textComponent)
       ui._glObj.registerComponent('chartComponent', ui.chartComponent)
       ui._glObj.init()
+      window.addEventListener('resize', function (e) {
+        container.style.height = (window.innerHeight - 33) + 'px'
+        container.style.width = window.innerWidth + 'px'
+        ui._glObj.updateSize()
+      })
     })
     .catch(console.error)
 }

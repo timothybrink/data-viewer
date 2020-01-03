@@ -44,6 +44,7 @@ body {
   color: white;
   font-family: sans-serif;
   font-size: 10pt;
+  height: 33px;
 }
 
 .app-menu > span {
