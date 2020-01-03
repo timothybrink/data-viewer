@@ -13,7 +13,9 @@ ui.config = {
  * (ui.json by default) and initiates the Golden Layout object.
  */
 ui.init = function () {
-  return fetch('/ui.json')
+  let sp = new URLSearchParams(window.location.search)
+  let configFile = sp.get('config') || 'ui.json'
+  return fetch('/config/' + configFile)
     .then(res => res.json())
     .then(prefs => {
       // Set up the ui
