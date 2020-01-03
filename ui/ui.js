@@ -8,11 +8,62 @@ ui.config = {
   }]
 }
 
+ui.configDialog = new Dialog(function (parent) {
+  fetch('/configs')
+    .then(res => res.json())
+    .then(configFiles => {
+      let selectEl
+      parent
+        .append(yadl.create('form')
+          .append(yadl.create('label').text('Config to load:').setAttribute('for', 'configFile'))
+          .append(selectEl = yadl.create('select').setAttribute('value', 'ui.json').setAttribute('name', 'configFile'))
+          .append(yadl.create('input').setAttribute('type', 'submit').setAttribute('value', 'Load'))
+          .listen('submit', function (e) {
+            e.preventDefault()
+
+            let sp = new URLSearchParams(window.location.search)
+            sp.set('config', this.configFile.value)
+            window.location.search = sp.toString()
+          })
+        )
+      
+      configFiles.forEach(file => {
+        selectEl.append(yadl.create('option').text(file).setAttribute('value', file))
+      })
+    })
+})
+
 /**
  * Initiate the ui. Adds UI components (charts/texts) from the preferences file
  * (ui.json by default) and initiates the Golden Layout object.
  */
 ui.init = function () {
+  // Set up application menu
+  this.appMenu = new ApplicationMenu([
+    {
+      label: 'Data',
+      submenu: [
+        {
+          label: 'Export',
+          click: () => { /* export data */ }
+        }
+      ]
+    },
+    {
+      label: 'View',
+      submenu: [
+        {
+          label: 'Load configuration file',
+          click: () => { this.configDialog.show() }
+        }
+      ]
+    }
+  ])
+
+  window.addEventListener('load', e => {
+    this.appMenu.init(yadl.select('.app-menu'))
+  })
+
   let sp = new URLSearchParams(window.location.search)
   let configFile = sp.get('config') || 'ui.json'
   return fetch('/config/' + configFile)

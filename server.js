@@ -2,6 +2,7 @@ const express = require('express')
 const app = express()
 const expressWs = require('express-ws')(app)
 const Connection = require('./Connection')
+const { readdir } = require('fs')
 
 const HOST = process.argv[2] || 'localhost'
 const PORT = process.argv[3] || '3300'
@@ -29,6 +30,14 @@ app.ws('/wsui', function (ws, req) {
 
   ws.on('close', function () {
     uiConnections.splice(uiConnections.indexOf(ws), 1)
+  })
+})
+
+app.get('/configs', function (req, res, next) {
+  readdir('./ui/config', function (err, files) {
+    if (err) return next(err)
+
+    res.json(files)
   })
 })
 
