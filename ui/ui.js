@@ -26,7 +26,7 @@ ui.configDialog = new Dialog(function (parent) {
             window.location.search = sp.toString()
           })
         )
-      
+
       configFiles.forEach(file => {
         selectEl.append(yadl.create('option').text(file).setAttribute('value', file))
       })
@@ -44,8 +44,17 @@ ui.init = function () {
       label: 'Data',
       submenu: [
         {
-          label: 'Export',
-          click: () => { /* export data */ }
+          label: 'Export as .CSV',
+          click: () => {
+            let csv = dataMgr.exportAsCSV()
+            let element = yadl.create('a')
+              .setAttribute('href', 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv))
+              .setAttribute('download', 'data.csv')
+              .style('display', 'none')
+              .attach()
+            element._element.click()
+            element.remove()
+          }
         }
       ]
     },

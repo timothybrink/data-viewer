@@ -53,3 +53,21 @@ dataMgr.getDataSet = function (fieldName) {
   }
   return result
 }
+
+/**
+ * Export the data as a CSV file.
+ */
+dataMgr.exportAsCSV = function () {
+  let csv = ''
+  // Add headers
+  csv += 'Time,' + this.datasets.map(ds => ds.name).join(',') + '\n'
+
+  let index = 0
+  while (this.datasets.every(ds => ds.data[index])) {
+    csv += this.datasets[0].data[index].time + ','
+    csv += this.datasets.map(ds => ds.data[index].data).join(',') + '\n'
+    index++
+  }
+
+  return csv
+}

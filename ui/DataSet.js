@@ -27,7 +27,7 @@ class DataSet {
    * @param {*} data The data to add to the dataset
    */
   addData(time, data) {
-    // this.data.push({time, data})  // Not sure that this is necessary
+    this.data.push({time, data})
 
     if (typeof this._cb == 'function')
       this._cb(this, time, data)
