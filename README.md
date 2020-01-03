@@ -5,7 +5,7 @@ A simple telemetry server/UI, built in JS.
 Features to add:
 
  - Better time-based graphing
- - Data export (currently the telem.py module has csv export built in, but I plan on moving that functionality to the server itself.)
+ - Data export
 
 So still a work in progress.
 
