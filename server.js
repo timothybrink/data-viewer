@@ -3,7 +3,8 @@ const app = express()
 const expressWs = require('express-ws')(app)
 const Connection = require('./Connection')
 
-const PORT = '3300'
+const HOST = process.argv[2] || 'localhost'
+const PORT = process.argv[3] || '3300'
 
 const connections = []
 const uiConnections = []
@@ -174,6 +175,6 @@ app.use(function (err, req, res, next) {
   res.status(500).send('Error 500')
 })
 
-app.listen(PORT, function () {
-  console.log(`Telemetry server listening on port ${PORT}...`)
+app.listen(PORT, HOST, function () {
+  console.log(`Telemetry server listening on ${HOST}:${PORT}...`)
 })
