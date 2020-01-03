@@ -5,11 +5,11 @@ const http = require('http')
 module.exports = class SerialPortTelemetry {
   // Add a fields argument to use instead of those found in the data... works better generally.
   // But fall back to fields found in the data.
-  constructor(port, timeout = 1000, baudRate = 9600, server = 'http://localhost:3300') {
+  constructor(port, timeout = 1000, baudRate = 9600, server = 'localhost:3300') {
     this.port = port
     this.timeout = timeout
     this.baudRate = baudRate
-    this.server = server
+    this.server = 'http://' + server
     this.finished = false
     this.serverId = 0
 
