@@ -12,14 +12,21 @@
       "type": "chart",
       "dataName": "test2",
       "description": "Another test",
-      "color": "rgb(100, 100, 255)",
+      "color": ["rgb(100, 100, 255)"],
       "position": "1 0"
     },
     {
       "type": "chart",
       "dataName": "test3",
-      "description": "Another test",
-      "color": "rgb(100, 255, 100)",
+      "description": "Stack test 1",
+      "color": "red",
+      "position": "0 1"
+    },
+    {
+      "type": "chart",
+      "dataName": "test5",
+      "description": "Stack test 2",
+      "color": "red",
       "position": "0 1"
     },
     {
