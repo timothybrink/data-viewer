@@ -31,6 +31,46 @@ app.ws('/wsui', function (ws, req) {
   })
 })
 
+// WebSocket data sources
+// Usage: connect to the server address (root). Then send a message with your
+// data headers (JSON, like so: { headers: [] }). After that, you can send data
+// in JSON in the following format: { data: <data>, time: <time> }
+app.ws('/', function (ws, req) {
+  // Generate connection id
+  let id = Connection.generateId()
+  while (connections.find(i => i.id == id)) {
+    id = Connection.generateId()
+  }
+
+  let conn = new Connection(id, [], ws)
+  connections.push(conn)
+  console.log('New data connection (WS). ID:', id)
+
+  ws.on('message', function (msg) {
+    try {
+      let { headers, data, time } = JSON.parse(msg)
+
+      if (headers) {
+        conn.headers = headers
+        uiConnections.forEach(ws => ws.send(JSON.stringify({ event: 'data-opened', id, headers })))
+      } else {
+        conn.update(data)
+        uiConnections.forEach(ws => ws.send(JSON.stringify({ id, time, data })))
+      }
+    } catch (e) {
+      console.error(e.stack)
+      ws.send(JSON.stringify({ error: e.message }))
+    }
+  })
+
+  ws.on('close', function () {
+    conn.close()
+    connections.splice(connections.indexOf(conn), 1)
+    uiConnections.forEach(ws => ws.send(JSON.stringify({ event: 'data-closed', id })))
+    console.log('WS connection closed. ID:', id)
+  })
+})
+
 // Requested when initiating a telemetry stream. Sets up headers.
 // Expected format: /init?headers=<JSON array>&timeout=<timeout in MS>
 app.get('/init', function (req, res, next) {

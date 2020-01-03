@@ -3,10 +3,13 @@ module.exports = class Connection {
     return Math.round(Math.random() * 10000)
   }
 
-  constructor(id, headers, timeout) {
+  constructor(id, headers, websocket) {
     this.id = id
     this.headers = headers
-    this.timeout = timeout
+    if (typeof websocket == 'number')
+      this.timeout = websocket
+    else
+      this.websocket = websocket
     this.data = []
     this.finished = false
   }

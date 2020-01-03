@@ -1,21 +1,20 @@
 const SerialPort = require('serialport')
 const Readline = require('@serialport/parser-readline')
-const http = require('http')
+const WebSocket = require('ws')
 
 module.exports = class SerialPortTelemetry {
-  // Add a fields argument to use instead of those found in the data... works better generally.
-  // But fall back to fields found in the data.
-  constructor(port, timeout = 1000, baudRate = 9600, server = 'localhost:3300') {
+  constructor(port, baudRate = 9600, server = 'localhost:3300') {
     this.port = port
-    this.timeout = timeout
     this.baudRate = baudRate
-    this.server = 'http://' + server
+    this.server = 'ws://' + server
     this.finished = false
-    this.serverId = 0
+    this.ws = null
+    this.wsOpen = false
 
     this.data = {}
     this.data.fields = []
     this.data.separator = ','
+    this.data.que = []
   }
 
   init() {
@@ -45,58 +44,43 @@ module.exports = class SerialPortTelemetry {
   }
 
   initiateServer() {
-    http.get(this.server + `/init?headers=${JSON.stringify(this.data.fields)}&timeout=${this.timeout}`, res => {
-      if (res.statusCode != 200)
-        console.log(res.statusCode)
+    this.ws = new WebSocket(this.server)
 
-      let data = []
-      res.on('data', chunk => data.push(chunk))
-      res.on('end', () => {
-        data = data.map(b => b.toString('utf-8')).join('')
-        let { done, id, error } = JSON.parse(data)
-        if (done) {
-          this.serverId = Number(id)
-          console.log('Telemetry connection initiated.')
-        } else {
-          console.log('Connection not initated. Error:', error)
-        }
-      })
+    let gotHeaderConfirmation = false
+    this.ws.on('open', () => {
+      this.wsOpen = true
+      this.ws.send(JSON.stringify({ headers: this.data.fields }))
+    })
+
+    this.ws.on('message', msg => {
+      let { error } = JSON.parse(msg)
+      if (!error && !gotHeaderConfirmation) {
+        gotHeaderConfirmation = true
+        console.log('Telemetry connection initiated.')
+      } else if (error) {
+        console.error('Connection error:', error)
+      }
     })
   }
 
   update(time, data) {
-    http.get(this.server + `/update?id=${this.serverId}&time=${time}&data=${JSON.stringify(data)}`, res => {
-      if (res.statusCode != 200)
-        console.log(res.statusCode)
-
-      let data = []
-      res.on('data', chunk => data.push(chunk))
-      res.on('end', () => {
-        let str = data.map(b => b.toString('utf-8')).join('')
-        if (str) {
-          let { done, error } = JSON.parse(str)
-          if (!done)
-            console.log('Error:', error, this.serverId)
-        }
-      })
-    })
+    if (!this.wsOpen) {
+      this.data.que.push(JSON.stringify({ time, data }))
+      return console.log('Websocket not yet open!')
+    } else if (this.data.que.length) {
+      for (let i = 0; i < this.data.que.length; i++) {
+        this.ws.send(this.data.que.shift())
+      }
+    }
+    this.ws.send(JSON.stringify({ time, data }))
   }
 
   close() {
     this.serialPort.close(err => {
       if (!err) console.log('Serial connection closed.')
 
-      http.get(this.server + `/close?id=${this.serverId}`, (err, data) => {
-        if (err) return console.error(err)
-
-        data = JSON.parse(data)
-
-        if (data.done) {
-          this.serverId = 0
-        }
-        this.finished = true
-        console.log('Telemetry connection closed')
-      })
+      this.ws.close()
+      console.log('Telemetry connection closed')
     })
   }
 }
