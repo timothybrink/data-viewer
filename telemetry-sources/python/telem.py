@@ -5,15 +5,16 @@ from urllib.error import URLError
 import json
 
 class Telem:
-    def __init__(self, headers=[], server='http://localhost:3300'):
+    def __init__(self, headers=[], server='http://localhost:3300', timeout=1000):
         self.headers = headers
         self.server = server
+        self.timeout = timeout
         self.finished = False
         self.server_id = None
         self.start_time = datetime.now()
         
         try:
-            query = {'headers': json.dumps(self.headers), 'timeout': 1000}
+            query = {'headers': json.dumps(self.headers), 'timeout': self.timeout}
             response = urlopen(self.server + '/init?' + urlencode(query, quote_via=quote))
             text = response.read().decode('utf-8')
             try:
