@@ -1,3 +1,5 @@
+// Have to improve time-series graphing
+
 class Graph {
   constructor(element, datasets) {
     this.parent = element
@@ -10,6 +12,36 @@ class Graph {
           line: {
             tension: 0
           }
+        },
+        scales: {
+          xAxes: [{
+            type: 'time',
+            time: {
+              unit: 'seconds',
+              stepSize: 1,
+              displayFormats: {
+                seconds: 'ss'
+              }
+            },
+            display: true,
+            scaleLabel: {
+              display: true,
+              labelString: 'Time'
+            },
+            ticks: {
+              major: {
+                fontStyle: 'bold',
+                fontColor: '#FF0000'
+              }
+            }
+          }],
+          yAxes: [{
+            display: true,
+            scaleLabel: {
+              display: true,
+              labelString: 'value'
+            }
+          }]
         }
       }
     }
@@ -41,7 +73,7 @@ class Graph {
         data: [],
         backgroundColor: 'rgba(0,0,0,0)'
       })
-      dataset.ondata((ds, t, d) => {this.newData(ds, t, d)})
+      dataset.ondata((ds, t, d) => { this.newData(ds, t, d) })
     })
 
     this.chart = new Chart(this.canvas, { type: 'line', data, options: this.options.chartjsOptions })
@@ -65,20 +97,14 @@ class Graph {
     this.updateData = []
     this.needsUpdate.fill(false)
 
-    this.chart.data.labels.push(time)
     this.chart.data.datasets.forEach((dataset, i) => {
-      dataset.data.push(data[i])
+      dataset.data.push({ t: time, y: data[i] })
+
+      if (this.options.shift && dataset.data.length > this.options.shiftSize) {
+        dataset.data.shift()
+      }
     })
 
-    if (this.options.shift) {
-      while (this.chart.data.labels.length > this.options.shiftSize) {
-        this.chart.data.labels.shift()
-        this.chart.data.datasets.forEach(dataset => {
-          dataset.data.shift()
-        })
-      }
-    }
-
-    this.chart.update(0)
+    this.chart.update()
   }
 }
