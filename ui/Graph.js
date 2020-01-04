@@ -1,5 +1,3 @@
-// Have to improve time-series graphing
-
 class Graph {
   constructor(element, datasets) {
     this.parent = element
