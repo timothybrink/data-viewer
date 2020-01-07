@@ -1,7 +1,7 @@
 ui.init()
 
 // Open websocket to server
-let ws = new WebSocket('ws://localhost:3300/wsui')
+let ws = new WebSocket(`ws://${location.host}/wsui`)
 
 ws.addEventListener('open', function (event) {
   ws.send('open-conn')
