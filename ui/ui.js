@@ -18,6 +18,7 @@ ui.configDialog = new Dialog(function (parent) {
           .append(yadl.create('label').text('Config to load:').setAttribute('for', 'configFile'))
           .append(selectEl = yadl.create('select').setAttribute('value', 'ui.json').setAttribute('name', 'configFile'))
           .append(yadl.create('input').setAttribute('type', 'submit').setAttribute('value', 'Load'))
+          .append(yadl.create('input').setAttribute('type', 'button').setAttribute('value', 'Cancel').listen('click', e => { e.preventDefault(); ui.configDialog.hide() }))
           .listen('submit', function (e) {
             e.preventDefault()
 
