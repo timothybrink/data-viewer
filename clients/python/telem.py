@@ -3,6 +3,7 @@ from urllib.request import urlopen
 from urllib.parse import urlencode, quote
 from urllib.error import URLError
 import json
+import _thread
 
 class Telem:
     def __init__(self, headers=[], server='localhost:3300', timeout=1000):
@@ -28,16 +29,15 @@ class Telem:
         except (ConnectionRefusedError, URLError):
             print('HTTP error: check that the server is running.')
 
+    def update_server(self, url):
+        urlopen(url)
     
     def update(self, *data):
         ms_since_start = round((datetime.now() - self.start_time) / timedelta(milliseconds=1))
         query = {'data': json.dumps(data), 'id': self.server_id, 'time': ms_since_start}
-        try:
-            urlopen(self.server + '/update?' + urlencode(query, quote_via=quote))
-            return True
-        except (ConnectionRefusedError, URLError):
-            print('HTTP error: check that server is running.')
-            return False
+        url = self.server + '/update?' + urlencode(query, quote_via=quote)
+        
+        thread = _thread.start_new_thread(self.update_server, (url,))
     
     def close(self):
         query = {'id': self.server_id}
