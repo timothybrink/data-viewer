@@ -17,22 +17,36 @@
       },
       {
         "type": "chart",
-        "dataName": "aero-force",
-        "description": "Aerodynamic force",
+        "dataName": "afy",
+        "description": "Aero force y",
         "color": "rgb(100, 100, 255)",
         "position": "1 0"
       },
       {
         "type": "chart",
-        "dataName": "vx",
-        "description": "x Velocity",
-        "color": "red",
-        "position": "0 1"
+        "dataName": "afx",
+        "description": "Aero force x",
+        "color": "rgb(100, 100, 255)",
+        "position": "1 0"
+      },
+      {
+        "type": "chart",
+        "dataName": "afz",
+        "description": "Aero force z",
+        "color": "rgb(100, 100, 255)",
+        "position": "1 0"
       },
       {
         "type": "chart",
         "dataName": "vy",
         "description": "y Velocity",
+        "color": "red",
+        "position": "0 1"
+      },
+      {
+        "type": "chart",
+        "dataName": "vx",
+        "description": "x Velocity",
         "color": "red",
         "position": "0 1"
       },
@@ -45,15 +59,15 @@
       },
       {
         "type": "chart",
-        "dataName": "mass",
-        "description": "Vessel mass",
+        "dataName": "throttle",
+        "description": "Vessel throttle",
         "color": "blue",
         "position": "1 1"
       },
       {
         "type": "chart",
-        "dataName": "throttle",
-        "description": "Vessel throttle",
+        "dataName": "mass",
+        "description": "Vessel mass",
         "color": "blue",
         "position": "1 1"
       }
