@@ -1,0 +1,61 @@
+{
+    "gridSize": "4x3",
+    "components": [
+      {
+        "type": "chart",
+        "dataName": "alt",
+        "description": "Surface altitude",
+        "color": "rgb(255, 100, 100)",
+        "position": "0 0"
+      },
+      {
+        "type": "chart",
+        "dataName": "burn-dist",
+        "description": "Burn distance calculated",
+        "color": "rgb(100, 100, 255)",
+        "position": "1 0"
+      },
+      {
+        "type": "chart",
+        "dataName": "aero-force",
+        "description": "Aerodynamic force",
+        "color": "rgb(100, 100, 255)",
+        "position": "1 0"
+      },
+      {
+        "type": "chart",
+        "dataName": "vx",
+        "description": "x Velocity",
+        "color": "red",
+        "position": "0 1"
+      },
+      {
+        "type": "chart",
+        "dataName": "vy",
+        "description": "y Velocity",
+        "color": "red",
+        "position": "0 1"
+      },
+      {
+        "type": "chart",
+        "dataName": "vz",
+        "description": "z Velocity",
+        "color": "red",
+        "position": "0 1"
+      },
+      {
+        "type": "chart",
+        "dataName": "mass",
+        "description": "Vessel mass",
+        "color": "blue",
+        "position": "1 1"
+      },
+      {
+        "type": "chart",
+        "dataName": "throttle",
+        "description": "Vessel throttle",
+        "color": "blue",
+        "position": "1 1"
+      }
+    ]
+  }
