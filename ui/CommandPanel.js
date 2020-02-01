@@ -2,11 +2,7 @@ class CommandPanel {
   static send(command) {
     if (!ws) return console.error('WS not defined!')
     if (!dataConnectionIds.length) {
-      let dialog = new Dialog(parent => parent
-        .append(yadl.create('div').text('No connections are open yet!'))
-        .append(yadl.create('button').text('Close').listen('click', e => { e.preventDefault(); dialog.hide() }))
-      )
-      dialog.show()
+      ui.toast('No open connections!')
       return
     }
 
