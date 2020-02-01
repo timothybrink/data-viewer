@@ -20,7 +20,8 @@
       "description": "Command Panel",
       "commands": [{
         "name": "Test",
-        "command": "test-1"
+        "command": "test-1",
+        "accelerator": "a"
       },{
         "name": "Another Test",
         "command": "test-2"
@@ -28,7 +29,7 @@
         "name": "Abort",
         "command": "ABORT",
         "color": "red",
-        "accelerator": "space"
+        "accelerator": " "
       },{
         "name": "A very long command",
         "command": "test-3",

@@ -7,6 +7,7 @@ ui.config = {
     content: []
   }]
 }
+ui.accelerators = []
 
 ui.configDialog = new Dialog(function (parent) {
   fetch('/configs')
@@ -100,6 +101,8 @@ ui.init = function () {
         container.style.width = window.innerWidth + 'px'
         ui._glObj.updateSize()
       })
+
+      ui.initAccelerators()
     })
     .catch(console.error)
 }
@@ -171,4 +174,18 @@ ui.commandComponent = function (container, state) {
   commandPanel.init()
   container.setTitle(state.description || 'Commands')
   return commandPanel
+}
+
+ui.initAccelerators = function () {
+  window.addEventListener('keydown', function (e) {
+    let accel = ui.accelerators.find(a => a.key == e.key)
+    if (!accel) return
+
+    e.preventDefault()
+    if (typeof accel.handler == 'function') accel.handler(e)
+  })
+}
+
+ui.addAccelerator = function (key, handler) {
+  ui.accelerators.push({key, handler})
 }
