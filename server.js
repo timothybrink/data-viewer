@@ -32,7 +32,10 @@ app.ws('/wsui', function (ws, req) {
         if (!conn) console.error('Connection not found!')
         else {
           let data = { command }
-          conn.websocket.send(JSON.stringify(data))
+          if (conn.websocket)
+            conn.websocket.send(JSON.stringify(data))
+          else
+            console.log('Commands over HTTP not implemented!')
         }
       } catch (e) {
         console.error(e)
