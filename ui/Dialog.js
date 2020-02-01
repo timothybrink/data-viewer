@@ -4,9 +4,8 @@ class Dialog {
   }
 
   show() {
-    this._elt = yadl.create('div').attach()
+    this._elt = yadl.create('.dialog').attach()
     this.contentFactory(this._elt)
-    this._elt.classList.add('dialog')
   }
 
   hide() {
