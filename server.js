@@ -24,6 +24,19 @@ app.ws('/wsui', function (ws, req) {
         id: conn.id,
         headers: conn.headers
       })))
+    } else {
+      try {
+        let { command, id } = JSON.parse(msg)
+        console.log('got command', command)
+        let conn = connections.find(c => c.id == id)
+        if (!conn) console.error('Connection not found!')
+        else {
+          let data = { command }
+          conn.websocket.send(JSON.stringify(data))
+        }
+      } catch (e) {
+        console.error(e)
+      }
     }
   })
 
@@ -44,6 +57,7 @@ app.get('/configs', function (req, res, next) {
 // Usage: connect to the server address (root). Then send a message with your
 // data headers (JSON, like so: { headers: [] }). After that, you can send data
 // in JSON in the following format: { data: <data>, time: <time> }
+// Data from the ui (i.e. commands) will be sent to you in the following form: { command: * }
 app.ws('/', function (ws, req) {
   // Generate connection id
   let id = Connection.generateId()

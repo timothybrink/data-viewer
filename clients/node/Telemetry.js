@@ -26,12 +26,14 @@ module.exports = class Telemetry {
     })
 
     this.ws.on('message', msg => {
-      let { error } = JSON.parse(msg)
+      let { error, command } = JSON.parse(msg)
       if (!error && !gotHeaderConfirmation) {
         gotHeaderConfirmation = true
         console.log('Telemetry connection initiated.')
       } else if (error) {
         console.error('Connection error:', error)
+      } else if (command) {
+        if (typeof this._oncommand == 'function') this._oncommand(command)
       }
     })
   }

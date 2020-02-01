@@ -93,6 +93,7 @@ ui.init = function () {
       ui._glObj = new GoldenLayout(ui.config, container)
       ui._glObj.registerComponent('textComponent', ui.textComponent)
       ui._glObj.registerComponent('chartComponent', ui.chartComponent)
+      ui._glObj.registerComponent('commandComponent', ui.commandComponent)
       ui._glObj.init()
       window.addEventListener('resize', function (e) {
         container.style.height = (window.innerHeight - 33) + 'px'
@@ -127,6 +128,7 @@ ui.addComponent = function (component) {
     fields,
     description: component.description,
     color: component.color,
+    commands: component.commands,
   }
   let position = ui.config.content[0].content[x].content[y]
   if (position && position.type == 'stack') {
@@ -159,4 +161,14 @@ ui.textComponent = function (container, state) {
   textViewer.init()
   container.setTitle(state.description)
   return textViewer
+}
+
+/**
+ * The command component. This function is passed to GoldenLayout#registerComponent.
+ */
+ui.commandComponent = function (container, state) {
+  let commandPanel = new CommandPanel(container.getElement()[0], state.commands)
+  commandPanel.init()
+  container.setTitle(state.description || 'Commands')
+  return commandPanel
 }

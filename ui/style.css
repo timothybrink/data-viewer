@@ -90,3 +90,24 @@ body {
 .context-menu .submenu::after {
   content: '>';
 }
+
+.command-button-wrapper {
+  color: white;
+  padding: 20px;
+}
+
+.command-button {
+  display: inline-block;
+  padding: 15px 30px;
+  width: 200px;
+  margin: 10px;
+  user-select: none;
+  -webkit-user-select: none;
+  background-image: linear-gradient(transparent, transparent);
+  background-color: rgba(255, 255, 255, 0.253);
+  text-align: center;
+}
+
+.command-button:hover {
+  background-image: linear-gradient(rgba(0, 0, 0, 0.18), rgba(0, 0, 0, 0.18));
+}

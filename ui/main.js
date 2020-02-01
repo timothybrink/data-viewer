@@ -2,6 +2,7 @@ ui.init()
 
 // Open websocket to server
 let ws = new WebSocket(`ws://${location.host}/wsui`)
+let dataConnectionIds = []
 
 ws.addEventListener('open', function (event) {
   ws.send('open-conn')
@@ -17,11 +18,13 @@ ws.addEventListener('message', function (event) {
       console.log('Headers received:')
       console.log(data.headers)
       dataMgr.initDataStream(data.id, data.headers)
+      dataConnectionIds.push(data.id)
     }
     // Not data either, a message telling us that a connection to the
     // server was closed
     else if (data.event == 'data-closed') {
       dataMgr.closeDataStream(data.id)
+      dataConnectionIds.splice(dataConnectionIds.indexOf(data.id), 1)
     }
     // Data was recieved from the source with the given id.
     else if (data.data) {

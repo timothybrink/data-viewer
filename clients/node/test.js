@@ -16,4 +16,8 @@ t.on('open', () => {
   }, 100)
 })
 
+t.on('command', command => {
+  console.log('Got command', command)
+})
+
 setTimeout(() => { t.close(); process.exit() }, 5000)

@@ -13,6 +13,27 @@
       "dataName": "test2",
       "description": "Another test",
       "color": ["rgb(100, 100, 255)"],
+      "position": "0 0"
+    },
+    {
+      "type": "command",
+      "description": "Command Panel",
+      "commands": [{
+        "name": "Test",
+        "command": "test-1"
+      },{
+        "name": "Another Test",
+        "command": "test-2"
+      },{
+        "name": "Abort",
+        "command": "ABORT",
+        "color": "red",
+        "accelerator": "space"
+      },{
+        "name": "A very long command",
+        "command": "test-3",
+        "color": "blue"
+      }],
       "position": "1 0"
     },
     {
