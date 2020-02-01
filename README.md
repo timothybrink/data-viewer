@@ -37,7 +37,7 @@ There is also a page (/cmd) that serves up just the commands that have been defi
 
 ### Data sources
 
-Data is sent to the UI by means of a WebSocket connection to the server. HTTP GET requests are also an option, but a slow one. Also I have not (probably won't) implemented commands for HTTP data sources.
+Data is sent to the UI by means of a WebSocket connection to the server. HTTP GET requests are also an option, but a slow one. Also I have not implemented commands for HTTP data sources, and currently don't plan to.
 
 The WebSocket server is at 'ws://hostname:port', at the root. Traffic is expected to be in JSON (stringified). First send an object with a list of data identifiers corresponding to the data you will be sending: { headers: string[] }. An acknowledgement will be sent back (although there's really no need to check), and then the server is ready for data.
 
