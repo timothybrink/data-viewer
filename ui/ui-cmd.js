@@ -11,6 +11,7 @@ ui.accelerators = []
 ui.init = function () {
   window.addEventListener('load', e => {
     ui.toastElement = yadl.create('.toast').attach()
+    ui.disabler = yadl.create('.disabler').attach()
   })
 
   let sp = new URLSearchParams(window.location.search)
@@ -47,13 +48,24 @@ ui.initAccelerators = function () {
   })
 }
 
-ui.toast = function (message) {
+ui.toast = function (message, time = 5) {
   ui.toastElement.text(message)
   ui.toastElement.setClass('visible')
 
-  setTimeout(() => ui.toastElement.removeClass('visible'), 5000)
+  if (time != 0)
+    setTimeout(() => ui.toastElement.removeClass('visible'), time * 1000)
 }
 
 ui.addAccelerator = function (key, handler) {
   ui.accelerators.push({key, handler})
+}
+
+ui.disable = function (msg) {
+  ui.toast(msg, 0)
+  ui.disabler.setClass('visible')
+}
+
+ui.enable = function () {
+  ui.toastElement.removeClass('visible')
+  ui.disabler.removeClass('visible')
 }
