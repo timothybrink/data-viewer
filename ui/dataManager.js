@@ -58,16 +58,26 @@ dataMgr.getDataSet = function (fieldName) {
  * Export the data as a CSV file.
  */
 dataMgr.exportAsCSV = function () {
+  if (!this.datasets.length) {
+    ui.toast('No data available!')
+    throw Error
+  }
   let csv = ''
   // Add headers
   csv += 'Time,' + this.datasets.map(ds => ds.name).join(',') + '\n'
 
   let index = 0
+  // currently this fails if one of the datasets expected was empty...
   while (this.datasets.every(ds => ds.data[index])) {
-    csv += this.datasets[0].data[index].time + ','
+    csv += this.datasets[0].data[index].time + ','     // uses timestamp from first column
     csv += this.datasets.map(ds => ds.data[index].data).join(',') + '\n'
     index++
   }
 
   return csv
+}
+
+dataMgr.clear = function () {
+  this.datasets.forEach(ds => ds.data = [])
+  ui.clearData()
 }

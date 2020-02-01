@@ -45,13 +45,6 @@
       "position": "0 1"
     },
     {
-      "type": "chart",
-      "dataName": "test5",
-      "description": "Stack test 2",
-      "color": "red",
-      "position": "0 1"
-    },
-    {
       "type": "text",
       "dataName": "test4",
       "description": "Another test",

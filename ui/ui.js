@@ -57,6 +57,12 @@ ui.init = function () {
             element._element.click()
             element.remove()
           }
+        },
+        {
+          label: 'Clear',
+          click: () => {
+            dataMgr.clear()
+          }
         }
       ]
     },
@@ -197,4 +203,9 @@ ui.toast = function (message) {
 
 ui.addAccelerator = function (key, handler) {
   ui.accelerators.push({key, handler})
+}
+
+ui.clearData = function () {
+  let charts = ui._glObj.root.getComponentsByName('chartComponent')
+  charts.forEach(c => c.clear())
 }

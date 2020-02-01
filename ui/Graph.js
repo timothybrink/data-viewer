@@ -105,4 +105,9 @@ class Graph {
 
     this.chart.update()
   }
+
+  clear() {
+    this.chart.data.datasets[0].data = []
+    this.chart.update()
+  }
 }
