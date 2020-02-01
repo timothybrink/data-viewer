@@ -62,6 +62,8 @@ app.ws('/', function (ws, req) {
       if (headers) {
         conn.headers = headers
         uiConnections.forEach(ws => ws.send(JSON.stringify({ event: 'data-opened', id, headers })))
+        // acknowledge reciept of headers
+        ws.send(JSON.stringify({ gotHeaders: true }))
       } else {
         conn.update(data)
         uiConnections.forEach(ws => ws.send(JSON.stringify({ id, time, data })))
