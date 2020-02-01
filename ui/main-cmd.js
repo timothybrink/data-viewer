@@ -61,6 +61,6 @@ connectionStatus.addEventListener('open', e => {
   console.log('Connection to server open')
 })
 connectionStatus.addEventListener('close', e => {
-  ui.disable('Connection to server closed. Trying again in 5 seconds.')
-  console.log('Connection to server closed.')
+  ui.disable('Connection to server lost. Trying again in 5 seconds.')
+  console.log('Connection to server lost.')
 })
