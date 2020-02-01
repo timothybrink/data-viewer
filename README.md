@@ -6,7 +6,7 @@ Still in development, adding features as I need them...
 
 ## Installation
 
-Clone this repo, `npm install`, and run `npm start`
+Clone this repo and run `npm install`.
 
 ## Usage
 
