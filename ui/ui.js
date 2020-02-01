@@ -73,6 +73,8 @@ ui.init = function () {
 
   window.addEventListener('load', e => {
     this.appMenu.init(yadl.select('.app-menu'))
+
+    ui.toastElement = yadl.create('.toast').attach()
   })
 
   let sp = new URLSearchParams(window.location.search)
