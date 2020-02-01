@@ -186,6 +186,13 @@ ui.initAccelerators = function () {
   })
 }
 
+ui.toast = function (message) {
+  ui.toastElement.text(message)
+  ui.toastElement.setClass('visible')
+
+  setTimeout(() => ui.toastElement.removeClass('visible'), 5000)
+}
+
 ui.addAccelerator = function (key, handler) {
   ui.accelerators.push({key, handler})
 }

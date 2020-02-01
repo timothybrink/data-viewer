@@ -91,6 +91,21 @@ body {
   content: '>';
 }
 
+.toast {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  background-color: #b7b7b7;
+  transition: all 0.2s ease;
+  opacity: 0;
+  padding: 20px 40px;
+  border-radius: 3px;
+}
+
+.toast.visible {
+  opacity: 1;
+}
+
 .command-button-wrapper {
   color: white;
   padding: 20px;
