@@ -11,7 +11,7 @@ const connections = []
 const uiConnections = []
 
 // The UI is served here.
-app.use(express.static('./ui/'))
+app.use(express.static('./ui/', { extensions: ['html'] }))
 
 // Websocket route for UI
 app.ws('/wsui', function (ws, req) {
