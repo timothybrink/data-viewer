@@ -10,10 +10,43 @@ Clone this repo, `npm install`, and run `npm start`
 
 ## Usage
 
-The idea is that node server.js runs a telemetry server on localhost:3300 (or a specified host and port). You can then send data to it, or open localhost:3300 in a browser and look at the incoming telemetry. Data is sent by means of HTTP get requests or a WebSocket connection. There's info on formatting in server.js. As for the UI, it can be customized by the UI.json file (in the ui/config/ directory), and you can load different json files from the ui itself.
-There are also three telemetry sources in the clients directory: a Python module, to simplify telemetry from Python, a generic Node.js module for sending telemetry to the server, and another specifically for getting data from serial ports and relaying it to the server.
-There is also command functionality. This means that you can set up buttons in the ui.json files, with colors, titles, and keyboard shortcuts (just one key for now) that will send a given string back to the data source. There is an example in the ui.json file, and the node client shows how to receeve commmands. Along with this comes a page at /cmd that is just the buttons (optimized for mobile.)
+Run
+```
+node server.js <host> <port>
+```
+This will run a telemetry server on the specified host and port. If host and port are not specified it will default to localhost:3300.
+
+Opening the address in a browser will display a UI capable of displaying data or sending commands. Data is sent to the server, as outlined below, and then passed on to the UI, while commands are sent from the user to the data source, through the server.
+
+### UI
+The UI can be customized by JSON files in the ui/config/ directory. By default, ui.json will be loaded, but this can be changed from the View menu in the UI or by setting `?config=\<filename.json>` in the URL. There are a couple UI files with the repository; ui.json is a test configuration that demonstrates most of the possible configuration options.
+
+The UI is made of a list of components, defined in the config file, each of which has a specific type: right now the three possible types are "chart", "text", and "command".
+
+The initial positions of the components are configured with the "position" field, which is set to a string with "x y" format. If two components are given the same position, they will be stacked/tabbed. The UI itself is built with [Golden Layout](https://golden-layout.com), so panels can be moved/stacked/closed/minimized once the UI is loaded.
+
+Descriptions essentially just define the title of the Golden Layout panel/tab.
+
+Chart and Text components have a "dataName" field, which is set either to a single string or an array of strings, indicating the data identifier(s) for the data that will be displayed there.
+
+Chart components also have a "color" field, which must be either a string or an array of strings (CSS color strings) indicating the colors to use in the graph, corresponding to the data identifiers in "dataName".
+
+Command components define commands to send back to the data source. For now they consist of buttons. They are configured via a list in the "commands" field. Each command is an object that can have a "name", "command", "color", and "accelerator". The name is the display text on the button, the command is the data (i.e. string) that you want to send when the command is triggered, the color is the color of the button, and the accelerator defines a keyboard shortcut that will also trigger the command. The value of the last must be just a single letter or character (e.g. "g", " " for space, and so on). Combinations are not supported right now.
+
+There is also a page (/cmd) that serves up just the commands that have been defined, optimized for mobile devices.
+
+### Data sources
+
+Data is sent to the UI by means of a WebSocket connection to the server. HTTP GET requests are also an option, but a slow one. Also I have not (probably won't) implemented commands for HTTP data sources.
+
+The WebSocket server is at 'ws://hostname:port', at the root. Traffic is expected to be in JSON (stringified). First send an object with a list of data identifiers corresponding to the data you will be sending: { headers: string[] }. An acknowledgement will be sent back (although there's really no need to check), and then the server is ready for data.
+
+Data is expected as follows: { data: *[], time: Number }. The timestamp is required for graphing; the number of milliseconds since start would work great. The data is expected to be an array of some values (probably numbers), in the same order as the original array of data identifiers that was sent.
+
+Commands will be sent to the data source in the following format: { command: * }.
+
+To simplify all of this, there are three telemetry sources in the clients directory: a Python module, a generic Node.js module, and another Node.js module specifically for getting data from serial ports and relaying it to the server. See those for usage information. But of course you are not limited to those; anything will work as long as HTTP requests to the server (or ideally WebSockets) are possible.
 
 ## Contact
 
-For any questions, problems, etc. (better documentation?) feel free to contact me at [contact@timothybrink.dev](mailto:contact@timothybrink.dev). 
+For any questions or issues feel free to contact me at [contact@timothybrink.dev](mailto:contact@timothybrink.dev). 
