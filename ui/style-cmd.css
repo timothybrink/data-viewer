@@ -31,9 +31,10 @@ body {
   width: 100%;
   box-sizing: border-box;
   margin: 10px 0;
-  /* The above 3 are the only differences from main */
+  font-size: 14pt;
+  padding: 20px 30px;
+  /* The above are the only differences from main */
   display: inline-block;
-  padding: 15px 30px;
   user-select: none;
   -webkit-user-select: none;
   background-image: linear-gradient(transparent, transparent);
