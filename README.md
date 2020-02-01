@@ -2,7 +2,7 @@
 
 A simple telemetry server/UI, built in JS.
 
-Still planning on adding a few features, such as commands from the ui to the source, and more UI options.
+Still in development, adding features as I need them...
 
 ## Installation
 
