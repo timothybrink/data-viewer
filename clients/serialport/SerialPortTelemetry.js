@@ -14,7 +14,7 @@ module.exports = class SerialPortTelemetry {
     this.data = {}
     this.data.fields = []
     this.data.separator = ','
-    this.data.que = []
+    this.data.queue = []
   }
 
   init() {
@@ -65,11 +65,11 @@ module.exports = class SerialPortTelemetry {
 
   update(time, data) {
     if (!this.wsOpen) {
-      this.data.que.push(JSON.stringify({ time, data }))
+      this.data.queue.push(JSON.stringify({ time, data }))
       return console.log('Websocket not yet open!')
-    } else if (this.data.que.length) {
-      for (let i = 0; i < this.data.que.length; i++) {
-        this.ws.send(this.data.que.shift())
+    } else if (this.data.queue.length) {
+      for (let i = 0; i < this.data.queue.length; i++) {
+        this.ws.send(this.data.queue.shift())
       }
     }
     this.ws.send(JSON.stringify({ time, data }))
