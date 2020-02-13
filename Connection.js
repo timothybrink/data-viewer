@@ -15,7 +15,7 @@ module.exports = class Connection {
   }
 
   update(data) {
-    this.data.push(data)
+    // this.data.push(data)
   }
 
   close() {
