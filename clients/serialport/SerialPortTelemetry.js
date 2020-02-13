@@ -32,6 +32,9 @@ module.exports = class SerialPortTelemetry {
 
     this.parser.on('data', data => {
       data = data.split(this.data.separator)
+      
+      if (!data.length == this.data.fields.length + 1)
+        console.log('Something is wrong with the incoming data...')
       // Assumes time is in the first column
       this.update(data.shift(), data)
     })
