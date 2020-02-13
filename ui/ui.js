@@ -98,6 +98,21 @@ ui.init = function () {
 
       prefs.components.forEach(ui.addComponent)
 
+      for (let x = 0; x < ui.config.content[0].content.length; x++) {
+        if (!ui.config.content[0].content[x]) {
+          console.warn('UI: Config: Removing empty column!')
+          ui.config.content[0].content.splice(x, 1)
+        } else {
+          let column = ui.config.content[0].content[x]
+          for (let y = 0; y < column.content.length; y++) {
+            if (!column.content[y]) {
+              console.warn('UI: Config: Removing empty row position!')
+              column.content.splice(y, 1)
+            }
+          }
+        }
+      }
+
       let container = document.querySelector('.gl-container')
       container.style.height = (window.innerHeight - 33) + 'px'
       ui._glObj = new GoldenLayout(ui.config, container)
