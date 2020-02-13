@@ -17,6 +17,11 @@ module.exports = class SerialPortTelemetry {
     this.data.queue = []
   }
 
+  setHeaders(headers) {
+    this.data.fields = headers
+    this.initiateServer()
+  }
+
   init() {
     this.serialPort = new SerialPort(this.port, { baudRate: this.baudRate })
 
@@ -26,16 +31,9 @@ module.exports = class SerialPortTelemetry {
     this.serialPort.on('open', () => console.log('Serial connection open'))
 
     this.parser.on('data', data => {
-      if (!this.data.fields.length) {
-        data = data.split(this.data.separator)
-        data.shift()
-        this.data.fields = data
-        this.initiateServer()
-      } else {
-        data = data.split(this.data.separator)
-        // Assumes time is in the first column
-        this.update(data.shift(), data)
-      }
+      data = data.split(this.data.separator)
+      // Assumes time is in the first column
+      this.update(data.shift(), data)
     })
 
     this.serialPort.on('error', e => {
