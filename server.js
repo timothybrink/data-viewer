@@ -3,9 +3,22 @@ const app = express()
 const expressWs = require('express-ws')(app)
 const Connection = require('./Connection')
 const { readdir } = require('fs')
+const yargs = require('yargs')
 
-const HOST = process.argv[2] || 'localhost'
-const PORT = process.argv[3] || '3300'
+let argv = yargs
+  .option('server', {
+    alias: 's',
+    type: 'string',
+    description: 'Server to serve on (default localhost)'
+  })
+  .option('port', {
+    alias: 'p',
+    type: 'string',
+    description: 'Port to serve on (default 3300)'
+  }).argv
+
+const HOST = argv.server || 'localhost'
+const PORT = argv.port || '3300'
 
 const connections = []
 const uiConnections = []
