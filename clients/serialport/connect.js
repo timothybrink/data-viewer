@@ -29,6 +29,11 @@ yargs
 
 argv = yargs.argv
 
+if (!argv.headers || !argv.port) {
+  console.error('Please include a port and headers!')
+  process.exit(0)
+}
+
 console.log('Port:', argv.port)
 console.log('Separator:', argv.sep || ',')
 console.log('Baud rate:', argv.br)

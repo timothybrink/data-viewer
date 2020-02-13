@@ -54,7 +54,7 @@ module.exports = class SerialPortTelemetry {
       let { error } = JSON.parse(msg)
       if (!error && !gotHeaderConfirmation) {
         gotHeaderConfirmation = true
-        console.log('Telemetry connection initiated.')
+        console.log('Server connection initiated.')
       } else if (error) {
         console.error('Connection error:', error)
       }
