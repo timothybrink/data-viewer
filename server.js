@@ -88,6 +88,7 @@ app.ws('/', function (ws, req) {
   ws.on('message', function (msg) {
     try {
       let { headers, data, time } = JSON.parse(msg)
+      time = Number(time)
 
       if (headers) {
         conn.headers = headers
