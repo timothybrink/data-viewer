@@ -66,6 +66,8 @@ ui.disable = function (msg) {
 }
 
 ui.enable = function () {
-  ui.toastElement.removeClass('visible')
-  ui.disabler.removeClass('visible')
+  if (ui.toastElement)
+    ui.toastElement.removeClass('visible')
+  if (ui.disabler)
+    ui.disabler.removeClass('visible')
 }
