@@ -38,14 +38,14 @@ function initWebSocket(retry) {
       data = JSON.parse(event.data)
       // Not data, just a message telling us the server has a new data source
       if (data.event == 'data-opened') {
-        console.log('Headers received:')
-        console.log(data.headers)
+        console.log('Headers received:', data.headers)
         dataMgr.initDataStream(data.id, data.headers)
         dataConnectionIds.push(data.id)
       }
       // Not data either, a message telling us that a connection to the
       // server was closed
       else if (data.event == 'data-closed') {
+        console.log('Data stream', data.id, 'closed.')
         dataMgr.closeDataStream(data.id)
         dataConnectionIds.splice(dataConnectionIds.indexOf(data.id), 1)
       }
