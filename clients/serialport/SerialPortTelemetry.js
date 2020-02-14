@@ -40,8 +40,15 @@ module.exports = class SerialPortTelemetry {
         this.data.started = data.includes(this.data.initiator)
         return
       }
-      console.log(data)
       data = data.split(this.data.separator)
+
+      // Tries to make data numbers
+      data = data.map(val => {
+        if (isNaN(Number(val)))
+          return val
+        else
+          return Number(val)
+      })
       
       if (data.length != this.data.fields.length + 1)
         console.log('Something is wrong with the incoming data...')
