@@ -15,6 +15,8 @@ module.exports = class SerialPortTelemetry {
     this.data.fields = []
     this.data.separator = ','
     this.data.queue = []
+    this.data.initiator = '#start'
+    this.data.started = false
   }
 
   setHeaders(headers) {
@@ -31,9 +33,17 @@ module.exports = class SerialPortTelemetry {
     this.serialPort.on('open', () => console.log('Serial connection open'))
 
     this.parser.on('data', data => {
+      // Expects the serial client to sent a initiator string before
+      // sending data to the telemetry string. This is to remove junk
+      // data from old serial sessions.
+      if (!this.data.started) {
+        this.data.started = data.includes(this.data.initiator)
+        return
+      }
+      console.log(data)
       data = data.split(this.data.separator)
       
-      if (!data.length == this.data.fields.length + 1)
+      if (data.length != this.data.fields.length + 1)
         console.log('Something is wrong with the incoming data...')
       // Assumes time is in the first column
       this.update(data.shift(), data)
@@ -41,6 +51,7 @@ module.exports = class SerialPortTelemetry {
 
     this.serialPort.on('error', e => {
       console.error(e.message)
+      process.exit(0)
     })
   }
 
