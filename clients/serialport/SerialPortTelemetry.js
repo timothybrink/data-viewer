@@ -17,6 +17,8 @@ module.exports = class SerialPortTelemetry {
     this.data.queue = []
     this.data.initiator = '#start'
     this.data.started = false
+
+    this.oncommand = null
   }
 
   setHeaders(headers) {
@@ -49,7 +51,7 @@ module.exports = class SerialPortTelemetry {
         else
           return Number(val)
       })
-      
+
       if (data.length != this.data.fields.length + 1)
         console.log('Something is wrong with the incoming data...')
       // Assumes time is in the first column
@@ -72,10 +74,12 @@ module.exports = class SerialPortTelemetry {
     })
 
     this.ws.on('message', msg => {
-      let { error } = JSON.parse(msg)
+      let { error, command } = JSON.parse(msg)
       if (!error && !gotHeaderConfirmation) {
         gotHeaderConfirmation = true
         console.log('Server connection initiated.')
+      } else if (command && typeof this.oncommand == 'function') {
+        this.oncommand(command)
       } else if (error) {
         console.error('Connection error:', error)
       }
@@ -94,12 +98,14 @@ module.exports = class SerialPortTelemetry {
     this.ws.send(JSON.stringify({ time, data }))
   }
 
-  close() {
+  close(preserveWS = false) {
     this.serialPort.close(err => {
       if (!err) console.log('Serial connection closed.')
 
-      this.ws.close()
-      console.log('Telemetry connection closed')
+      if (!preserveWS) {
+        this.ws.close()
+        console.log('Telemetry connection closed')
+      }
     })
   }
 }
