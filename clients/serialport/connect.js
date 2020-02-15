@@ -43,4 +43,10 @@ console.log('Server:', argv.server)
 let spt = new SerialPortTelemetry(argv.port, argv.br, argv.server)
 spt.data.seperator = argv.seperator
 spt.setHeaders(argv.headers)
-spt.init()
+spt.oncommand = function (command) {
+  if (command == '#init') {
+    spt.init()
+  } else if (command == '#close') {
+    spt.close(true)
+  }
+}
