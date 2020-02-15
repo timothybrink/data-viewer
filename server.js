@@ -40,7 +40,6 @@ app.ws('/wsui', function (ws, req) {
     } else {
       try {
         let { command, id } = JSON.parse(msg)
-        console.log('got command', command)
         let conn = connections.find(c => c.id == id)
         if (!conn) console.error('Connection not found!')
         else {
