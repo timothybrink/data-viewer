@@ -156,6 +156,7 @@ ui.addComponent = function (component) {
     description: component.description,
     color: component.color,
     commands: component.commands,
+    scale: component.scale
   }
   let position = ui.config.content[0].content[x].content[y]
   if (position && position.type == 'stack') {
@@ -175,6 +176,7 @@ ui.addComponent = function (component) {
 ui.chartComponent = function (container, state) {
   let graph = new Graph(container.getElement()[0], state.fields.map(dataMgr.getDataSet))
   graph.options.color = state.color
+  graph.options.scale = state.scale || 'auto'
   graph.init()
   container.setTitle(state.description)
   return graph

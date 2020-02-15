@@ -5,6 +5,7 @@ class Graph {
       shift: true,
       shiftSize: 100,
       color: 'rgb(0, 0, 0)',
+      scale: 'auto',
       chartjsOptions: {
         elements: {
           line: {
@@ -38,7 +39,8 @@ class Graph {
             scaleLabel: {
               display: true,
               labelString: 'value'
-            }
+            },
+            ticks: {}
           }]
         }
       }
@@ -50,6 +52,12 @@ class Graph {
   }
 
   init() {
+    // move options to chartjsOptions if necessary
+    if (this.options.scale != 'auto') {
+      this.options.chartjsOptions.scales.yAxes[0].ticks.suggestedMin = this.options.scale[0]
+      this.options.chartjsOptions.scales.yAxes[0].ticks.suggestedMax = this.options.scale[1]
+    }
+
     this.canvas = document.createElement('canvas')
     this.canvas.width = this.parent.clientWidth
     this.canvas.height = this.parent.clientHeight
@@ -107,7 +115,9 @@ class Graph {
   }
 
   clear() {
-    this.chart.data.datasets[0].data = []
+    for (let i = 0; i < this.chart.data.datasets.length; i++) {
+      this.chart.data.datasets[i].data = []
+    }
     this.chart.update()
   }
 }
