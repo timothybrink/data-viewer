@@ -91,6 +91,14 @@ body {
   content: '>';
 }
 
+.menu-item-accelerator {
+  color: #ffffff5e;  
+  position: absolute;
+  right: 10px;
+  display: inline-block;  
+  padding: 0;
+}
+
 .toast {
   position: fixed;
   bottom: 30px;

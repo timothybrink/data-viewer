@@ -24,7 +24,8 @@ class ContextMenu {
       menuItemTag: 'div',
       separatorClass: 'separator',
       submenuClass: 'submenu',
-      menuWidth: 200
+      menuWidth: 200,
+      acceleratorClass: 'menu-item-accelerator'
     }
 
     let elt = yadl.select(this.options.menuElementTag + '.' + this.options.menuElementClass)
@@ -61,6 +62,13 @@ class ContextMenu {
         mi.listen('mouseover', e => { mi.submenu.show(0, 0) })
           .listen('mouseout', mi.submenu.hide)
           .classList.add(this.options.submenuClass)
+        
+      if (menuItem.accelerator) {
+        ui.addAccelerator(menuItem.accelerator, menuItem.click)
+        mi.append(yadl.create('span')
+          .text(menuItem.accelerator)
+          .setClass(this.options.acceleratorClass))
+      }
 
       mi.attach(this._elt)
 

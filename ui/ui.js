@@ -62,7 +62,8 @@ ui.init = function () {
           label: 'Clear',
           click: () => {
             dataMgr.clear()
-          }
+          },
+          accelerator: 'c'
         }
       ]
     },
