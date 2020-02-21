@@ -51,7 +51,7 @@ module.exports = class Telemetry extends EventEmitter {
       this.emit('queued')
       return
     } else if (this.data.que.length) {
-      for (let i = 0; i < this.data.que.length; i++) {
+      while (this.data.que.length > 0) {
         this.ws.send(this.data.que.shift())
       }
     }
