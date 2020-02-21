@@ -1,11 +1,13 @@
 const WebSocket = require('ws')
+const EventEmitter = require('events')
 
-module.exports = class Telemetry {
+module.exports = class Telemetry extends EventEmitter {
   /**
    * @param {Array} fields   An array of data identifiers, to be sent to the server
    * @param {String} server  The server to use. Defaults to localhost:3300
    */
   constructor(fields, server = 'localhost:3300') {
+    super()
     this.server = 'ws://' + server
     this.finished = false
     this.wsOpen = false
@@ -22,18 +24,18 @@ module.exports = class Telemetry {
     this.ws.on('open', () => {
       this.wsOpen = true
       this.ws.send(JSON.stringify({ headers: this.data.fields }))
-      if (typeof this._onopen == 'function') this._onopen()
+      this.emit('open')
     })
 
     this.ws.on('message', msg => {
       let { error, command } = JSON.parse(msg)
       if (!error && !gotHeaderConfirmation) {
         gotHeaderConfirmation = true
-        console.log('Telemetry connection initiated.')
+        this.emit('confirmed')
       } else if (error) {
-        console.error('Connection error:', error)
+        this.emit('error', error)
       } else if (command) {
-        if (typeof this._oncommand == 'function') this._oncommand(command)
+        this.emit('command', command)
       }
     })
   }
@@ -46,7 +48,8 @@ module.exports = class Telemetry {
   updateServer(time, data) {
     if (!this.wsOpen) {
       this.data.que.push(JSON.stringify({ time, data }))
-      return console.log('Websocket not yet open!')
+      this.emit('queued')
+      return
     } else if (this.data.que.length) {
       for (let i = 0; i < this.data.que.length; i++) {
         this.ws.send(this.data.que.shift())
@@ -62,7 +65,7 @@ module.exports = class Telemetry {
     this.ws.close()
     this.wsOpen = false
     this.finished = true
-    console.log('Telemetry connection closed')
+    this.emit('close')
   }
 
   /**
@@ -89,14 +92,5 @@ module.exports = class Telemetry {
 
       this.updateServer(time, dataArr)
     }
-  }
-
-  /**
-   * Listen for events
-   * @param {String} event      The event to listen for. Supported: 'open'
-   * @param {Function} handler  The handler to call
-   */
-  on(event, handler) {
-    this['_on' + event] = handler
   }
 }

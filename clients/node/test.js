@@ -20,4 +20,12 @@ t.on('command', command => {
   console.log('Got command', command)
 })
 
+t.on('confirmed', () => console.log('Telemetry connection initiated.'))
+
+t.on('error', error => console.log(error))
+
+t.on('close', () => console.log('Telemetry connection closed.'))
+
+t.on('queued', () => console.log('Websocket not yet open!'))
+
 setTimeout(() => { t.close(); process.exit() }, 5000)
