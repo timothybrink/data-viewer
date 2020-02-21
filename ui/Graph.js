@@ -32,6 +32,9 @@ class Graph {
                 fontStyle: 'bold',
                 fontColor: '#FF0000'
               }
+            },
+            gridLines: {
+              color: '#777'
             }
           }],
           yAxes: [{
@@ -40,7 +43,12 @@ class Graph {
               display: true,
               labelString: 'value'
             },
-            ticks: {}
+            ticks: {
+              fontColor: '#777'
+            },
+            gridLines: {
+              color: '#777'
+            }
           }]
         }
       }
