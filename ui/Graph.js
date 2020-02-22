@@ -34,7 +34,7 @@ class Graph {
               }
             },
             gridLines: {
-              color: '#777'
+              color: '#555'
             }
           }],
           yAxes: [{
@@ -44,10 +44,10 @@ class Graph {
               labelString: 'value'
             },
             ticks: {
-              fontColor: '#777'
+              fontColor: '#555'
             },
             gridLines: {
-              color: '#777'
+              color: '#555'
             }
           }]
         }
