@@ -10,7 +10,7 @@ dataMgr.datasets = []
  */
 dataMgr.newData = function (id, time, data) {
   let datasets = dataMgr.datasets.filter(ds => ds.connection == id)
-  datasets.forEach(ds => ds.addData(time, data[ds.column]))
+  datasets.forEach(ds => ds.addData(time, data[ds.column] || data))
 }
 
 /**
@@ -23,6 +23,13 @@ dataMgr.initDataStream = function (id, headers) {
   headers.forEach((colName, i) => {
     let ds = dataMgr.getDataSet(colName)
     ds.start(i, id)
+  })
+
+  // for any remaining datasets, just give them the
+  // headers array
+  dataMgr.datasets.forEach(ds => {
+    if (ds.column == -1)
+      ds.start(headers, id)
   })
 }
 
