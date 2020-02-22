@@ -57,6 +57,8 @@ class Graph {
     this.updateData = []
     this.needsUpdate = new Array(datasets.length)
     this.needsUpdate.fill(false)
+
+    this.missingColumn = false
   }
 
   init() {
@@ -96,6 +98,10 @@ class Graph {
 
   newData(dataset, time, data) {
     let i = this.datasets.indexOf(dataset)
+    if ((this.needsUpdate[i] || this.updateData[i]) && !this.missingColumn) {
+      this.missingColumn = true
+      return console.error('Error: It appears a data name was specified in config but not found in data!')
+    }
     this.needsUpdate[i] = true
     this.updateData[i] = data
     this.updateTime = time
