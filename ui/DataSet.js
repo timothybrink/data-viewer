@@ -1,12 +1,20 @@
-class DataSet {
+class DataEvent extends Event {
+  constructor(time, data) {
+    super('data')
+    this.time = time
+    this.data = data
+  }
+}
+
+class DataSet extends EventTarget {
   constructor(name) {
+    super()
     this.name = name
     this.column = -1
     this.connection = -1
     this.finished = false
     this.started = false
 
-    this._cb = null
     this.data = []
   }
 
@@ -20,6 +28,8 @@ class DataSet {
     this.column = column
     this.connection = connection
     this.started = true
+
+    this.dispatchEvent(new Event('start'))
   }
 
   /**
@@ -29,15 +39,6 @@ class DataSet {
   addData(time, data) {
     this.data.push({time, data})
 
-    if (typeof this._cb == 'function')
-      this._cb(this, time, data)
-  }
-
-  /**
-   * Adds a callback to execute when new data is added.
-   * @param {function} callback The callback to execute when new data is added
-   */
-  ondata(callback) {
-    this._cb = callback
+    this.dispatchEvent(new DataEvent(time, data))
   }
 }

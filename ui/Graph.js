@@ -87,7 +87,8 @@ class Graph {
         data: [],
         backgroundColor: 'rgba(0,0,0,0)'
       })
-      dataset.ondata((ds, t, d) => { this.newData(ds, t, d) })
+      let graph = this
+      dataset.addEventListener('data', function (e) { graph.newData(this, e.time, e.data) })
     })
 
     this.chart = new Chart(this.canvas, { type: 'line', data, options: this.options.chartjsOptions })

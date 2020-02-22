@@ -32,7 +32,8 @@ class TextViewer {
     this.datasets.forEach(dataset => {
       this.elements.push(createElement(dataset.name))
 
-      dataset.ondata((ds, t, d) => { this.newData(ds, t, d) })
+      let tv = this
+      dataset.addEventListener('data', function (e) { tv.newData(this, e.time, e.data) })
     })
   }
 
