@@ -3,6 +3,9 @@
 A simple telemetry server/UI, built in JS.
 
 Still in development, adding features as I need them...
+Todo:
+ - Stream data to file on server rather than keeping it in memory anywhere
+ - Data types... Or just assume number
 
 ## Installation
 
