@@ -16,6 +16,6 @@ ipcRenderer.on('dataClose', function (event, id) {
   dataConnectionIds.splice(dataConnectionIds.indexOf(id), 1)
 })
 
-ipcRenderer.on('data', function (event, id, time, data) {
+ipcRenderer.on('data', function (event, id, data, time) {
   dataMgr.newData(id, time, data)
 })

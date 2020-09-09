@@ -5,6 +5,16 @@ const Connection = require('./Connection')
 const { readdir } = require('fs')
 const yargs = require('yargs')
 
+if (!process.send) {
+  console.error('Expects to be a child process!')
+  process.exit(1)
+}
+
+function sendToUi(event, dataId, data, time) {
+  // uiConnections.forEach(ws => ws.send(JSON.stringify({ event, dataId, data })))
+  process.send({ event, dataId, data, time })
+}
+
 let argv = yargs
   .option('server', {
     alias: 's',
@@ -23,8 +33,28 @@ const PORT = argv.port || '3300'
 const connections = []
 const uiConnections = []
 
-// The UI is served here.
-app.use(express.static('./ui/', { extensions: ['html'] }))
+// Handles commands, either from IPC or WS.
+function handleCommand(command, id) {
+  let conn = connections.find(c => c.id == id)
+  if (conn) {
+    let data = { command }
+    if (conn.websocket)
+      conn.websocket.send(JSON.stringify(data))
+    else
+      console.log('Commands over HTTP not implemented!')
+  }
+}
+
+// Event listener for commands from the ui
+process.on('message', msg => {
+  if (msg.event == 'command') {
+    console.log('Got command ' + msg.command)
+    handleCommand(msg.command, msg.dataId)
+  }
+})
+
+// The remote UI is served here. For now, just a command panel.
+app.use(express.static('./ui/', { index: 'cmd.html' }))
 
 // Websocket route for UI
 app.ws('/wsui', function (ws, req) {
@@ -40,15 +70,7 @@ app.ws('/wsui', function (ws, req) {
     } else {
       try {
         let { command, id } = JSON.parse(msg)
-        let conn = connections.find(c => c.id == id)
-        if (!conn) console.error('Connection not found!')
-        else {
-          let data = { command }
-          if (conn.websocket)
-            conn.websocket.send(JSON.stringify(data))
-          else
-            console.log('Commands over HTTP not implemented!')
-        }
+        handleCommand(command, id)
       } catch (e) {
         console.error(e)
       }
@@ -91,12 +113,12 @@ app.ws('/', function (ws, req) {
 
       if (headers) {
         conn.headers = headers
-        uiConnections.forEach(ws => ws.send(JSON.stringify({ event: 'data-opened', id, headers })))
+        sendToUi('dataOpen', id, headers)
         // acknowledge reciept of headers
         ws.send(JSON.stringify({ gotHeaders: true }))
       } else {
         conn.update(data)
-        uiConnections.forEach(ws => ws.send(JSON.stringify({ id, time, data })))
+        sendToUi('data', id, data, time)
       }
     } catch (e) {
       console.error(e.stack)
@@ -107,7 +129,7 @@ app.ws('/', function (ws, req) {
   ws.on('close', function () {
     conn.close()
     connections.splice(connections.indexOf(conn), 1)
-    uiConnections.forEach(ws => ws.send(JSON.stringify({ event: 'data-closed', id })))
+    sendToUi('dataClose', id)
     console.log('WS connection closed. ID:', id)
   })
 })
@@ -127,7 +149,7 @@ app.get('/init', function (req, res, next) {
     }
 
     connections.push(new Connection(id, headers, timeout))
-    uiConnections.forEach(ws => ws.send(JSON.stringify({ event: 'data-opened', id, headers })))
+    sendToUi('dataOpen', id, headers)
 
     res.json({ done: true, id })
   } catch (e) {
@@ -164,13 +186,13 @@ app.get('/update', function (req, res, next) {
     let time = Number(req.query.time)
 
     conn.update(data)
-    uiConnections.forEach(ws => ws.send(JSON.stringify({ id, time, data })))
+    sendToUi('data', id, data, time)
 
     // Set timeout
     let timeout = setTimeout(() => {
       conn.close()
       connections.splice(connections.findIndex(i => i.id == id), 1)
-      uiConnections.forEach(ws => ws.send(JSON.stringify({ event: 'data-closed', id })))
+      sendToUi('dataClose', id)
       console.log(`Connection ${id} closed (timeout).`)
     }, conn.timeout)
     timeouts.push({ id, timeout })
@@ -196,7 +218,7 @@ app.get('/close', function (req, res, next) {
 
   conn.close()
   connections.splice(connections.findIndex(i => i.id == id), 1)
-  uiConnections.forEach(ws => ws.send(JSON.stringify({ event: 'data-closed', id })))
+  sendToUi('dataClose', id)
   console.log('Connection closed.')
 
   res.json({ done: true })

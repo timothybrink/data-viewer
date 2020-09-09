@@ -6,7 +6,7 @@ class CommandPanel {
       ui.toast('No open connections!')
       return
     }
-    if (!ws) {
+    if (!window.ws) {
       // This hopefully means we're on electron.
 
       // For now we send it to the first data connection

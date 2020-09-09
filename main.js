@@ -1,12 +1,15 @@
-const { app, BrowserWindow } = require('electron')
+const { app, BrowserWindow, ipcMain, webContents } = require('electron')
 const url = require('url')
 const path = require('path')
 const fs = require('fs')
+const cp = require('child_process')
+
+let win
 
 function createWindow() {
   // Create the browser window
   // Create the browser window.
-  let win = new BrowserWindow({
+  win = new BrowserWindow({
     width: 1200,
     height: 800,
     frame: false,
@@ -27,6 +30,21 @@ function createWindow() {
 
   win.once('ready-to-show', function () {
     win.show()
+  })
+
+  // Emitted when the window is closed.
+  win.on('closed', () => {
+    // Dereference the window object, usually you would store windows
+    // in an array if your app supports multi windows, this is the time
+    // when you should delete the corresponding element.
+    win = null
+  })
+
+  // See https://www.electronjs.org/docs/api/web-contents#event-new-window
+  // Currently I simply don't show the new window. At some point this would
+  // be a nice feature, but not yet...
+  win.webContents.on('new-window', event => {
+    event.preventDefault()
   })
 }
 
@@ -56,4 +74,19 @@ app.on('activate', () => {
 let uiConfigPath = path.join(app.getPath('userData'), 'uiConfig')
 fs.mkdir(uiConfigPath, () => {
   console.log('Created config directory: ' + uiConfigPath)
+})
+
+// Spawn telemetry server thread
+let serverProcess = cp.fork(path.join(__dirname, 'server.js'))
+
+// Pass on messages from server
+serverProcess.on('message', msg => {
+  let { event, dataId, data, time } = msg
+  win.webContents.send(event, dataId, data, time)
+})
+
+// Manage commands
+ipcMain.on('command', (event, command, dataId) => {
+  let obj = { event: 'command', command, dataId }
+  serverProcess.send(obj)
 })
