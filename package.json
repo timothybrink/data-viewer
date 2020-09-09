@@ -1,20 +1,22 @@
 {
   "name": "telemetry",
-  "version": "1.0.0",
-  "description": "Simple telemetry server/interface",
-  "main": "server.js",
+  "version": "2.0.0",
+  "description": "Simple telemetry app",
+  "main": "main.js",
   "dependencies": {
     "@tbrink/yadl": "^1.2.0",
     "express": "^4.17.1",
     "express-ws": "^4.0.0",
-    "serialport": "^8.0.6",
-    "ws": "^7.2.1",
-    "yargs": "^15.3.1"
+    "serialport": "^9.0.1",
+    "ws": "^7.3.1",
+    "yargs": "^16.0.0"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "electron": "^10.1.1"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "start": "electron ."
   },
   "repository": {
     "type": "git",
