@@ -1,0 +1,51 @@
+body {
+  background-color: #1e1e1e;
+}
+
+.titlebar {
+  background-color: rgba(0, 0, 0, 0.623);
+  font-family: sans-serif;
+  color: rgba(255, 255, 255, 0.541);
+}
+
+.titlebar.active {
+  color: rgba(255, 255, 255, 0.95);
+  background-color: rgba(0, 0, 0, 0.568);
+}
+
+.app-menu > span:hover, .window-control:hover {
+  background-color: rgba(255, 255, 255, 0.18)
+}
+
+.window-control.close:hover {
+  background-color: rgb(255, 0, 0);
+}
+
+.app-menu > span:active, .window-control:active {
+  background-color: rgb(92, 92, 92)
+}
+
+.window-control svg {
+  stroke: white;
+  stroke-opacity: 0.541;
+}
+
+.titlebar.active .window-control svg {
+  stroke-opacity: 0.95;
+}
+
+.context-menu {
+  background-color: rgb(44, 44, 44);
+  font-family: sans-serif;
+  font-size: 10pt;
+  color: rgba(255, 255, 255, 0.74);
+  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.479);
+}
+
+.context-menu div:hover {
+  background-color: rgba(255, 255, 255, 0.10)
+}
+
+.menu-item-accelerator {
+  color: #ffffff5e;  
+}

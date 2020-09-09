@@ -1,0 +1,28 @@
+.context-menu {
+  position: fixed;
+  z-index: 10;
+}
+
+.context-menu.hidden {
+  display: none;
+}
+
+.context-menu div {
+  -webkit-user-select: none;
+  padding: 10px;
+}
+
+.context-menu .separator {
+  background-color: white
+}
+
+.context-menu .submenu::after {
+  content: '>';
+}
+
+.menu-item-accelerator {
+  position: absolute;
+  right: 10px;
+  display: inline-block;  
+  padding: 0;
+}

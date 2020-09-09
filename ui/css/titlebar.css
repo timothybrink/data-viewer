@@ -1,0 +1,41 @@
+.titlebar {
+  font-size: 10pt;
+  -webkit-user-select: none;
+  -webkit-app-region: drag;
+}
+
+.app-menu {
+  display: inline-block;
+  -webkit-app-region: no-drag;
+  user-select: none;
+  font-family: sans-serif;
+  font-size: 10pt;
+  height: 33px;
+}
+
+.app-menu > span, .window-control {
+  padding: 8px;
+  display: inline-block;
+}
+
+.title-container {
+  display: inline-block;
+  padding: 8px;
+  position: absolute;
+  left: 50%;
+}
+
+.window-controls-container {
+  display: inline-block;
+  -webkit-app-region: no-drag;
+  position: absolute;
+  right: 0;
+}
+
+.window-control.hidden {
+  display: none;
+}
+
+.window-control svg {
+  fill: transparent;
+}

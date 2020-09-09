@@ -1,6 +1,5 @@
 body {
   margin: 0;
-  background-color: #1e1e1e;
 }
 
 .dialog {
@@ -36,67 +35,6 @@ body {
 .text-output-container {
   padding: 5px 10px;
   color: white;
-}
-
-.app-menu {
-  display: block;
-  user-select: none;
-  color: white;
-  font-family: sans-serif;
-  font-size: 10pt;
-  height: 33px;
-}
-
-.app-menu > span {
-  padding: 8px;
-  display: inline-block;
-}
-
-.app-menu > span:hover {
-  background-color: rgba(255, 255, 255, 0.18)
-}
-
-.app-menu > span:active {
-  background-color: rgb(92, 92, 92)
-}
-
-.context-menu {
-  position: fixed;
-  z-index: 10;
-  background-color: rgb(44, 44, 44);
-  font-family: sans-serif;
-  font-size: 10pt;
-  color: rgba(255, 255, 255, 0.74);
-  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.479);
-}
-
-.context-menu.hidden {
-  display: none;
-}
-
-.context-menu div {
-  -webkit-user-select: none;
-  padding: 10px;
-}
-
-.context-menu div:hover {
-  background-color: rgba(255, 255, 255, 0.10)
-}
-
-.context-menu .separator {
-  background-color: white
-}
-
-.context-menu .submenu::after {
-  content: '>';
-}
-
-.menu-item-accelerator {
-  color: #ffffff5e;  
-  position: absolute;
-  right: 10px;
-  display: inline-block;  
-  padding: 0;
 }
 
 .toast {
