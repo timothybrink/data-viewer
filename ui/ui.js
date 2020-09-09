@@ -1,3 +1,16 @@
+const yadl = require('@tbrink/yadl')
+window.$ = require('jquery')
+const GoldenLayout = require('golden-layout')
+const { remote } = require('electron')
+const path = require('path')
+const fs = require('fs')
+const { promisify } = require('util')
+
+const pfs = {
+  readdir: promisify(fs.readdir),
+  readFile: promisify(fs.readFile),
+}
+
 const ui = {}
 
 ui.layout = {}
@@ -7,11 +20,13 @@ ui.config = {
     content: []
   }]
 }
+
+ui.configPath = path.join(remote.app.getPath('userData'), 'uiConfig')
 ui.accelerators = []
 
+// Not sure about this. Used to reload the entire page, which I guess should be ok still..
 ui.configDialog = new Dialog(function (parent) {
-  fetch('/configs')
-    .then(res => res.json())
+  pfs.readdir(ui.configPath)
     .then(configFiles => {
       let selectEl
       parent
@@ -23,9 +38,7 @@ ui.configDialog = new Dialog(function (parent) {
           .listen('submit', function (e) {
             e.preventDefault()
 
-            let sp = new URLSearchParams(window.location.search)
-            sp.set('config', this.configFile.value)
-            window.location.search = sp.toString()
+            alert('not implemented')
           })
         )
 
@@ -49,13 +62,8 @@ ui.init = function () {
           label: 'Export as .CSV',
           click: () => {
             let csv = dataMgr.exportAsCSV()
-            let element = yadl.create('a')
-              .setAttribute('href', 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv))
-              .setAttribute('download', 'data.csv')
-              .style('display', 'none')
-              .attach()
-            element._element.click()
-            element.remove()
+            
+            // ask where to save
           }
         },
         {
@@ -85,10 +93,15 @@ ui.init = function () {
     ui.disabler = yadl.create('.disabler').attach()
   })
 
-  let sp = new URLSearchParams(window.location.search)
-  let configFile = sp.get('config') || 'ui.json'
-  return fetch('/config/' + configFile)
-    .then(res => res.json())
+  pfs.readdir(ui.configPath)
+    .then(configFiles => {
+      let lastUiConfig = localStorage.getItem('lastUiConfig')
+      if (lastUiConfig) return lastUiConfig
+      else if (configFiles[0]) return path.join(ui.configPath, configFiles[0])
+      else return path.join(remote.app.getAppPath(), 'ui', 'config', 'ui.json')
+    })
+    .then(filename => pfs.readFile(filename, 'utf8'))
+    .then(JSON.parse)
     .then(prefs => {
       // Set up the ui
       ui.layout = prefs

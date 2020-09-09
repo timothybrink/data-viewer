@@ -1,14 +1,22 @@
+// const { ipcRenderer } = require('electron')
+
 class CommandPanel {
   static send(command) {
-    if (!ws) return console.error('WS not defined!')
     if (!dataConnectionIds.length) {
       ui.toast('No open connections!')
       return
     }
+    if (!ws) {
+      // This hopefully means we're on electron.
 
-    // for now we just send the command to the first (and probably only)
-    // data connection
-    ws.send(JSON.stringify({ command, id: dataConnectionIds[0] }))
+      // For now we send it to the first data connection
+      ipcRenderer.send('command', command, dataConnectionIds[0])
+      console.log('Sent command ' + command)
+    } else {
+      // for now we just send the command to the first (and probably only)
+      // data connection
+      ws.send(JSON.stringify({ command, id: dataConnectionIds[0] }))
+    }
   }
 
   static handleKeyStroke(command) {
