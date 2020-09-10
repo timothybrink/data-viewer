@@ -71,9 +71,15 @@ app.on('activate', () => {
 })
 
 // Set up telemetry config files
+// For the ui
 let uiConfigPath = path.join(app.getPath('userData'), 'uiConfig')
 fs.mkdir(uiConfigPath, () => {
   console.log('Created config directory: ' + uiConfigPath)
+})
+// For plugins
+let pluginConfigPath = path.join(app.getPath('userData'), 'pluginConfig')
+fs.mkdir(pluginConfigPath, () => {
+  console.log('Created config directory: ' + pluginConfigPath)
 })
 
 // Spawn telemetry server thread
@@ -85,8 +91,30 @@ serverProcess.on('message', msg => {
   win.webContents.send(event, dataId, data, time)
 })
 
+// Telemetry plugin manager. We pass it the plugin config path as an argument.
+let pluginProcess = cp.fork(path.join(__dirname, 'pluginManager.js'), [pluginConfigPath], { stdio: 'pipe' })
+
+// pass on messages from plugins
+pluginProcess.on('message', msg => {
+  let { event, dataId, data, time } = msg
+
+  win.webContents.send(event, dataId, data, time)
+})
+
+// errors
+pluginProcess.on('error', (code) => {
+  console.error('error with plugin process: ' + code)
+})
+pluginProcess.stdout.on('data', data => {
+  console.log(data.toString('utf8').trim())
+})
+pluginProcess.stderr.on('data', chunk => {
+  console.error(chunk.toString('utf8').trim())
+})
+
 // Manage commands
 ipcMain.on('command', (event, command, dataId) => {
   let obj = { event: 'command', command, dataId }
   serverProcess.send(obj)
+  pluginProcess.send(obj)
 })
