@@ -4,6 +4,7 @@
   "description": "Simple telemetry app",
   "main": "main.js",
   "dependencies": {
+    "@abandonware/noble": "^1.9.2-10",
     "@tbrink/yadl": "^1.2.0",
     "chart.js": "^2.9.3",
     "express": "^4.17.1",
@@ -14,11 +15,12 @@
     "yargs": "^16.0.0"
   },
   "devDependencies": {
-    "electron": "^10.1.1"
+    "electron": "^10.1.5"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "electron ."
+    "start": "electron .",
+    "rebuild": "npm rebuild --runtime=electron --target=10.1.5 --arch=x64 --rebuild --disturl=https://electronjs.org/headers --build_from_source=true"
   },
   "repository": {
     "type": "git",
