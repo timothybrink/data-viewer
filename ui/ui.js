@@ -97,8 +97,15 @@ ui.init = function () {
     .then(configFiles => {
       let lastUiConfig = localStorage.getItem('lastUiConfig')
       if (lastUiConfig) return lastUiConfig
-      else if (configFiles[0]) return path.join(ui.configPath, configFiles[0])
-      else return path.join(remote.app.getAppPath(), 'ui', 'config', 'ui.json')
+      else if (configFiles[0]) {
+        let url = path.join(ui.configPath, configFiles[0])
+        localStorage.setItem('lastUiConfig', url)
+        return url
+      } else {
+        let url = path.join(remote.app.getAppPath(), 'ui', 'config', 'ui.json')
+        localStorage.setItem('lastUiConfig', url)
+        return url
+      }
     })
     .then(filename => pfs.readFile(filename, 'utf8'))
     .then(JSON.parse)
