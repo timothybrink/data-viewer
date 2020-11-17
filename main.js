@@ -53,14 +53,8 @@ function createWindow() {
 // Some APIs can only be used after this event occurs.
 app.whenReady().then(createWindow)
 
-// Quit when all windows are closed, except on macOS. There, it's common
-// for applications and their menu bar to stay active until the user quits
-// explicitly with Cmd + Q.
-app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') {
-    app.quit()
-  }
-})
+// Quit and clean up when all windows are closed
+app.on('window-all-closed', shutDown)
 
 app.on('activate', () => {
   // On macOS it's common to re-create a window in the app when the
@@ -118,3 +112,20 @@ ipcMain.on('command', (event, command, dataId) => {
   serverProcess.send(obj)
   pluginProcess.send(obj)
 })
+
+// Shutdown management; these don't seem to work. They should, but they don't. Clean up still seems fine when exiting
+// with Ctrl-C though.
+process.on('SIGINT', shutDown)
+process.on('SIGTERM', shutDown)
+
+function shutDown() {
+  app.quit()
+  console.log('Shutting down child processess...')
+  if (serverProcess) {
+    serverProcess.kill() ? console.log('Sucessfully terminated server') : console.log('Failed to terminate server')
+  }
+  if (pluginProcess) {
+    pluginProcess.kill() ? console.log('Sucessfully terminated plugins') : console.log('Failed to terminate plugins')
+  }
+  console.log('Exiting.')
+}
