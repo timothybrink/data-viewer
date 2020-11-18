@@ -33,7 +33,6 @@ plugins.forEach(pluginName => {
 
   let headers = instance.init()
   if (!headers && !Array.isArray(headers)) throw new Error('init() must return an array of headers!')
-  log('initialized plugin ' + pluginName)
 
   // Pass the dataOpen event up
   process.send({ event: 'dataOpen', dataId: pluginName, data: headers }, err => {
@@ -56,4 +55,6 @@ plugins.forEach(pluginName => {
       if (err) console.error(err)
     })
   })
+
+  log('initialized plugin ' + pluginName)
 })
