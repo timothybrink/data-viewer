@@ -3,6 +3,7 @@ const url = require('url')
 const path = require('path')
 const fs = require('fs')
 const cp = require('child_process')
+const SuspendedChannel = require('./SuspendedChannel')
 
 let win
 
@@ -88,11 +89,23 @@ serverProcess.on('message', msg => {
 // Telemetry plugin manager. We pass it the plugin config path as an argument.
 let pluginProcess = cp.fork(path.join(__dirname, 'pluginManager.js'), [pluginConfigPath], { stdio: 'pipe' })
 
+let messageQueue = new SuspendedChannel(function (item) {
+  win.webContents.send(item.event, item.dataId, item.data, item.time)
+})
+let didListen = false
+
 // pass on messages from plugins
 pluginProcess.on('message', msg => {
-  let { event, dataId, data, time } = msg
+  messageQueue.send(msg);
 
-  win.webContents.send(event, dataId, data, time)
+  if (win.webContents.isLoading() && !didListen) {
+    win.webContents.on('did-finish-load', () => {
+      messageQueue.enable()
+    })
+    didListen = true
+  } else if (!win.webContents.isLoading() && !messageQueue.active) {
+    messageQueue.enable();
+  }
 })
 
 // errors
