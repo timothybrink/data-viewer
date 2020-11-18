@@ -18,8 +18,7 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "electron .",
-    "rebuild": "npm rebuild --runtime=electron --target=10.1.5 --arch=x64 --rebuild --disturl=https://electronjs.org/headers --build_from_source=true"
+    "start": "electron ."
   },
   "repository": {
     "type": "git",
