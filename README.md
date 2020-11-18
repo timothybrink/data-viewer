@@ -1,6 +1,6 @@
 # Data Viewer
 
-A simple telemetry server/UI, built in JS.
+A simple telemetry app.
 
 Still in development, adding features as I need them...
 Todo:
@@ -49,7 +49,3 @@ Data is expected as follows: { data: *[], time: Number }. The timestamp is requi
 Commands will be sent to the data source in the following format: { command: * }.
 
 To simplify all of this, there are three telemetry sources in the clients directory: a Python module, a generic Node.js module, and another Node.js module specifically for getting data from serial ports and relaying it to the server. See those for usage information. But of course you are not limited to those; anything will work as long as HTTP requests to the server (or ideally WebSockets) are possible.
-
-## Contact
-
-For any questions or issues feel free to contact me at [contact@timothybrink.dev](mailto:contact@timothybrink.dev). 
