@@ -38,7 +38,14 @@ ui.configDialog = new Dialog(function (parent) {
           .listen('submit', function (e) {
             e.preventDefault()
 
-            alert('not implemented')
+            let newFile = path.join(ui.configPath, selectEl.get('value'));
+            console.log('Setting ui file to ' + newFile);
+
+            localStorage.setItem('lastUiConfig', newFile);
+
+            // remove listeners to avoid 'Attempting to call a function in a renderer window that has been closed or released'
+            remote.getCurrentWindow().removeAllListeners();
+            remote.getCurrentWindow().reload();
           })
         )
 
