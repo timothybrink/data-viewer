@@ -15,11 +15,9 @@ Clone this repo and run `npm install`.
 
 Run
 ```
-node server.js <host> <port>
+npm run start
 ```
-This will run a telemetry server on the specified host and port. If host and port are not specified it will default to localhost:3300.
-
-Opening the address in a browser will display a UI capable of displaying data or sending commands. Data is sent to the server, as outlined below, and then passed on to the UI, while commands are sent from the user to the data source, through the server.
+This will start the app. A telemetry server is started on localhost:3300.
 
 ### UI
 The UI can be customized by JSON files in the ui/config/ directory. By default, ui.json will be loaded, but this can be changed from the View menu in the UI or by setting `?config=\<filename.json>` in the URL. There are a couple UI files with the repository; ui.json is a test configuration that demonstrates most of the possible configuration options.
