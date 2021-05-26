@@ -1,3 +1,5 @@
+const Chart = require('chart.js')
+
 class Graph {
   constructor(element, datasets) {
     this.parent = element

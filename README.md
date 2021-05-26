@@ -1,11 +1,10 @@
 # Data Viewer
 
-A simple telemetry server/UI, built in JS.
+A simple telemetry app.
 
 Still in development, adding features as I need them...
 Todo:
  - Stream data to file on server rather than keeping it in memory anywhere
- - Data types... Or just assume number
 
 ## Installation
 
@@ -15,11 +14,9 @@ Clone this repo and run `npm install`.
 
 Run
 ```
-node server.js <host> <port>
+npm run start
 ```
-This will run a telemetry server on the specified host and port. If host and port are not specified it will default to localhost:3300.
-
-Opening the address in a browser will display a UI capable of displaying data or sending commands. Data is sent to the server, as outlined below, and then passed on to the UI, while commands are sent from the user to the data source, through the server.
+This will start the app. A telemetry server is started on localhost:3300.
 
 ### UI
 The UI can be customized by JSON files in the ui/config/ directory. By default, ui.json will be loaded, but this can be changed from the View menu in the UI or by setting `?config=\<filename.json>` in the URL. There are a couple UI files with the repository; ui.json is a test configuration that demonstrates most of the possible configuration options.
@@ -49,7 +46,3 @@ Data is expected as follows: { data: *[], time: Number }. The timestamp is requi
 Commands will be sent to the data source in the following format: { command: * }.
 
 To simplify all of this, there are three telemetry sources in the clients directory: a Python module, a generic Node.js module, and another Node.js module specifically for getting data from serial ports and relaying it to the server. See those for usage information. But of course you are not limited to those; anything will work as long as HTTP requests to the server (or ideally WebSockets) are possible.
-
-## Contact
-
-For any questions or issues feel free to contact me at [contact@timothybrink.dev](mailto:contact@timothybrink.dev). 

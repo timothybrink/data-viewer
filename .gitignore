@@ -1,3 +1,4 @@
 node_modules
 /ui/config/*
 !/ui/config/ui.json
+plugins/*
