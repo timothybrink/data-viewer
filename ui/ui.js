@@ -1,7 +1,7 @@
 const yadl = require('@tbrink/yadl')
 window.$ = require('jquery')
 const GoldenLayout = require('golden-layout')
-const { remote } = require('electron')
+const remote = require('@electron/remote')
 const path = require('path')
 const fs = require('fs')
 const { promisify } = require('util')

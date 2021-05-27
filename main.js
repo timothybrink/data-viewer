@@ -19,6 +19,7 @@ function createWindow() {
     webPreferences: {
       nodeIntegration: true,
       enableRemoteModule: true,
+      contextIsolation: false,
     },
     show: false,
   })
@@ -40,14 +41,9 @@ function createWindow() {
     // when you should delete the corresponding element.
     win = null
   })
-
-  // See https://www.electronjs.org/docs/api/web-contents#event-new-window
-  // Currently I simply don't show the new window. At some point this would
-  // be a nice feature, but not yet...
-  win.webContents.on('new-window', event => {
-    event.preventDefault()
-  })
 }
+
+require('@electron/remote/main').initialize()
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
